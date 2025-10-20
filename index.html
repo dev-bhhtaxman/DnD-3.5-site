@@ -28,13 +28,18 @@
     <p class="inline" id="firstbar"><a href="#roller">Roller</a></p>
   </div>
 
-  <form action="https://en.wikipedia.org/w/index.php">
-    <input type="text" name="search">
-    <button>DnD Wiki</button>
-  </form>
-
-
-  </form>
+      <div class = "otherSearchBox">
+            <form action="https://en.wikipedia.org/w/index.php" target="_blank">
+                  <input type="text" name="search">
+                  <button>DnD Wiki</button>
+            </form>
+      </div>
+      <div class = "otherSearchBox">
+            <form action="https://www.d20srd.org/index.htm" target="_blank">
+                  <input type="text" name="q" placeholder="Search d20 SRD">
+                  <button>Srd20-Site</button>
+            </form>
+      </div>
 
   <main>
 
@@ -118,8 +123,8 @@
 
     <div>
       <h1 id="charGen">CHARACTER GENERATOR</h1>
-      <button id="genChar"><img src="images/newHeroButton.png" alt="getNewCharacter" id=newCharButton></button>
-      <textarea id="outputBox" rows="25" cols="25" readonly></textarea>
+      <button id="genChar">NEW CHARACTER</button>
+      <div class="charGenBox"><p id="outputBox"></p></div>
     </div>
 
 
