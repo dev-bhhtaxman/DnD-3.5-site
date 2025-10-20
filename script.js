@@ -1,61 +1,44 @@
-// var beholderImage;
-// var timerId;
 
 
+const class_list = ['Bard', 'Barbarian', 'Wizard', 'Rogue', 'Cleric', 'Paladin', 'Fighter', 'Ranger', 'Druid', 'Monk', 'Sorcerer',]
 
-// function startMovingRight() {
-//    beholderImage = document.getElementById("beholder");
-//    timerId = setInterval(movePicRight,0,10);
-// }
+const eyecolor_list = ['Blue', 'Gray', 'Brown', 'Black', 'Green', 'Yellow', 'Red', 'Orange', 'White', 'Purple']
 
+const haircolor_list = ['Blue', 'Gray', 'Brown', 'Black', 'Green', 'Yellow', 'Red', 'Orange', 'White', 'Purple']
 
-// function startMovingLeft() {
-//    beholderImage = document.getElementById("beholder");
-//    timerId = setInterval(movePicLeft,0,10);
-// }
+const level_list = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20']
 
+const mood_list = ['Angry', 'Sad', 'Happy', 'Afraid', 'Surprised', 'Disgusted', 'Contemptuous', 'Love', 'Lustful', 'Shy', 'Raging', 'Trustful', 'Anticipation', 'Indifference', 'Amused', 'Anxious', 'In Awe', 'Interested', 'Envious', 'Blah']
 
-// function movePicRight() {
-//    let left = parseInt(beholderImage.style.left) || 0;
-//    beholderImage.style.left = left + 5 + "px";
-// }
+const personality_list = ['loyal and sensible', 'responsible and caring', 'humanitarian and pragmatic', 'logical and systematic', 'independent and spontaneous', 'introspective and creative', 'quiet and sensitive', 'curious and intellectual', 'free spirit', 'entertainer', 'innovative and enlessly positive', 'outof the box thinker and quiet', 'hard working and pragmatic', 'personable and go-getting', 'helper and networker', 'born leader', 'angry and spiteful', 'hateful and jelous', 'wrathful and vengeful', 'psychotic and unstable']
 
+const quest_list = ['Yes', 'No']
 
-// function movePicLeft() {
-//    let right = parseInt(beholderImage.style.right) || 0;
-//    beholderImage.style.right = right + 5 + "px";
-// }
+const gender_list = ['Male', 'Female', 'Other', 'Nonbinary']
+
+const race_list = ['Human', 'Dwarf', 'Elf', 'Gnome', 'Half-elf', 'Half-orc', 'Halfling', 'Goblin', 'Orc', 'Kobold', 'Gnoll', 'Lizardfolk', 'Merfolk', 'Troglodyte', 'Aasimar', 'Tiefling', 'Drow', 'Githyanki']
+
+const Map = {'Human' : 'Stats',}
 
 
-window.addEventListener("load",startMovingRight);
-setTimeout(() => clearInterval(timerId), 200);
-window.setTimeout(timerId);
-
-
-
-
-
-
-
-
-async function fetchCharacter() {
-      const response = await fetch("https://github.com/dev-bhhtaxman/dnd-character-generator/blob/6659282a9b8b7a2d507e9c3e0f7ccf74f4d6a482/app.py");
-      const data = await response.json();
-
-      document.getElementById("abcdef").value = JSON.stringify(data, null, 2);
-    }
-
-
-
-
-
-
-
-
-
-
-
-
+function generateOutput() {
+   let result = "";
+   for (let i = 0; i < 1; i++) {
+      const class_list = class_list[Math.floor(Math.random() * class_list.length)];
+      const eyecolor_list = eyecolor_list[Math.floor(Math.random() * eyecolor_list.length)];
+      const haircolor_list = haircolor_list[Math.floor(Math.random() * haircolor_list.length)];
+      const level_list = level_list[Math.floor(Math.random() * level_list.length)];
+      const mood_list = mood_list[Math.floor(Math.random() * mood_list.length)];
+      const personality_list = personality_list[Math.floor(Math.random() * personality_list.length)];
+      const quest_list = quest_list[Math.floor(Math.random() * quest_list.length)];
+      const gender_list = gender_list[Math.floor(Math.random() * gender_list.length)];
+      
+      
+      result += `${class_list} ${eyecolor_list} ${haircolor_list} ${level_list} ${mood_list} ${personality_list} ${quest_list} ${gender_list}\n`;
+   }
+   document.getElementById("outputBox").value = result;
+}
+document.getElementById("genChar").addEventListener("click", generateOutput);
 
 
 
