@@ -28,23 +28,25 @@
     <p class="inline" id="firstbar"><a href="#roller">Roller</a></p>
   </div>
 
-      <div class = "otherSearchBox">
-            <form action="https://en.wikipedia.org/w/index.php" target="_blank">
-                  <input type="text" name="search">
-                  <button>DnD Wiki</button>
-            </form>
+      <div class="searchContainer">
+            <div class = "otherSearchBox" id="first_srch">
+                  <form action="https://en.wikipedia.org/w/index.php" target="_blank">
+                        <input type="text" name="search" placeholder="Search Wiki">
+                        <button>DnD Wiki</button>
+                  </form>
+            </div>
+            <div class = "otherSearchBox" id="second_srch">
+                  <form action="https://www.d20srd.org/index.htm" target="_blank">
+                        <input type="text" name="q" placeholder="Search d20 SRD">
+                        <button>Srd20-Site</button>
+                  </form>
+            </div>
       </div>
-      <div class = "otherSearchBox">
-            <form action="https://www.d20srd.org/index.htm" target="_blank">
-                  <input type="text" name="q" placeholder="Search d20 SRD">
-                  <button>Srd20-Site</button>
-            </form>
-      </div>
-
   <main>
 
     <h1 id="books">BOOKS</h1>
-    <div class="flex-container">
+
+    <!--<div class="flex-container">
       <div><a href="books/PHB.pdf"><img src="images/booksPic.png" id=BookPic alt="phb"></a></div>
       <div><a href="books/D&D 3.5 - PHB2.pdf"><img src="images/phb2.png" id=BookPic alt="phb2"></a></div>
       <div><a href="books/[D&D 3.5] Complete Champion.pdf"><img src="images/Complete_Champion.png" id=BookPic
@@ -106,32 +108,230 @@
       <div><a href="books/D&D - Fiend Folio.pdf"><img src="images/Fiendfolio.png" id=BookPic alt="fiend_folio"></a>
       </div>
 
+    </div> -->
 
 
-      <!--<div><a href = ""><img src="" id = BookPic alt = ""></a></div>-->
+<div class="rolodex-wrap">
+      <button class="nav prev" aria-label="Previous" id="prevBtn">‹</button>
+
+      <div class="rolodex" id="booksRolodex">
+            <a class="card" href="books/PHB.pdf" target="_blank">
+                  <img src="images/booksPic.png" class="book-pic" alt="PHB">
+                  <span>PHB</span>
+            </a>
+
+            <a class="card" href="books/D%26D%203.5%20-%20PHB2.pdf" target="_blank">
+                  <img src="images/phb2.png" class="book-pic" alt="PHB2">
+                  <span>PHB 2</span>
+            </a>
+
+            <a class="card" href="books/%5BD%26D%203.5%5D%20Complete%20Champion.pdf" target="_blank">
+                  <img src="images/Complete_Champion.png" class="book-pic" alt="Complete Champion">
+                  <span>Complete Champion</span>
+            </a>
+
+            <a class="card" href="books/[D&D 3.5] Complete Mage.pdf" target="_blank">
+                  <img src="images/Complete_Mage.png" class="book-pic" alt="Complete Mage">
+                  <span>Complete Mage</span>
+            </a>
+
+            <a class="card" href="books/[D&D 3.5] Complete Warrior.pdf" target="_blank">
+                  <img src="images/Complete_Warrior_coverthumb.png" class="book-pic" alt="Complete Warrior">
+                  <span>Complete Warrior</span>
+            </a>
+            
+            <a class="card" href="books/[D&D 3.5] Complete Arcane.pdf" target="_blank">
+                  <img src="images/Complete-arcane-cover.png" class="book-pic" alt="Complete Arcane">
+                  <span>Complete Arcane</span>
+            </a>
+
+            <a class="card" href="books/[D&D 3.5] Complete Adventurer.pdf" target="_blank">
+                  <img src="images/completeAdventurerBook.png" class="book-pic" alt="Complete Adventurer">
+                  <span>Complete Adventurer</span>
+            </a>
+
+            <a class="card" href="books/Complete Divine  3.5.pdf" target="_blank">
+                  <img src="images/Complete_Divine.png" class="book-pic" alt="Complete Divine">
+                  <span>Complete Divine</span>
+            </a>
+
+            <a class="card" href="books/D&D - Complete Scoundrel.pdf" target="_blank">
+                  <img src="images/Complete_Scoundrel.png" class="book-pic" alt="Complete Scoundrel">
+                  <span>Complete Scoundrel</span>
+            </a>
+
+            <a class="card" href="books/3.5 Expanded Psionic_s Handbook.pdf" target="_blank">
+                  <img src="images/En_psionics_hndbk_v35_cover.png" class="book-pic" alt="Expanded Psionics">
+                  <span>Expanded Psionics</span>
+            </a>
+
+            <a class="card" href="books/[D&D 3.5] Magic Item Compendium.pdf" target="_blank">
+                  <img src="images/Magic_Item_Compendium.png" class="book-pic" alt="Magic Item Compendium">
+                  <span>Magic Item Compendium</span>
+            </a>
+
+            <a class="card" href="books/3.5 magic of incarnum.pdf" target="_blank">
+                  <img src="images/Magic_of_Incarnum.jpg" class="book-pic" alt="Magic of Incarnum">
+                  <span>Magic of Incarnum</span>
+            </a>
+
+            <a class="card" href="books/[D&D 3.5] Spell Compendium.pdf" target="_blank">
+                  <img src="images/Spell_Compendium.png" class="book-pic" alt="Spell Compendium">
+                  <span>Spell Compendium</span>
+            </a>
+
+            <a class="card" href="books/D&D - Masters of the Wild.pdf" target="_blank">
+                  <img src="images/Masters_of_the_Wild.png" class="book-pic" alt="Masters of the Wild">
+                  <span>Masters of the Wild</span>
+            </a>
+
+            <a class="card" href="books/D&D - Book of Vile Darkness.pdf" target="_blank">
+                  <img src="images/book_of_vile_darkness.png" class="book-pic" alt="Book of Vile Darkness">
+                  <span>Book of Vile Darkness</span>
+            </a>
+
+            <a class="card" href="books/D&D - Arms and Equipment Guide.pdf" target="_blank">
+                  <img src="images/arms_and_equipment_guide.png" class="book-pic" alt="Arms and Equipment Guide">
+                  <span>Arms and Equipment Guide</span>
+            </a>
+
+            <a class="card" href="books/DMG 3.5.pdf" target="_blank">
+                  <img src="images/dmg.png" class="book-pic" alt="DMG">
+                  <span>DMG</span>
+            </a>
+
+            <a class="card" href="books/D&D 3.5 - Book of Exalted Deeds.pdf" target="_blank">
+                  <img src="images/bookofexalteddeeds.png" class="book-pic" alt="Book of Exalted Deeds">
+                  <span>Book of Exalted Deeds</span>
+            </a>
+
+            <a class="card" href="books/d&d 3.5 - epic level handbook.pdf" target="_blank">
+                  <img src="images/epiclevelhandbook.png" class="book-pic" alt="Epic Level Handbook">
+                  <span>Epic Level Handbook</span>
+            </a>
+
+            <a class="card" href="books/DEFENDERS OF FAITH.pdf" target="_blank">
+                  <img src="images/Defenders_of_the_Faith.png" class="book-pic" alt="Defenders of the Faith">
+                  <span>Defenders of the Faith</span>
+            </a>
+
+            <a class="card" href="books/DRAGON MAGIC.pdf" target="_blank">
+                  <img src="images/Dragon_Magic.png" class="book-pic" alt="Dragon Magic">
+                  <span>Dragon Magic</span>
+            </a>
+
+            <a class="card" href="books/DROW OF THE UNDERDARK.pdf" target="_blank">
+                  <img src="images/Drow_of_the_Underdark.png" class="book-pic" alt="Drow of the Underdark">
+                  <span>Drow of the Underdark</span>
+            </a>
+
+            <a class="card" href="books/LIBRIS MORTIS.pdf" target="_blank">
+                  <img src="images/Libris_Mortis_cover.png" class="book-pic" alt="Libris Mortis">
+                  <span>Libris Mortis</span>
+            </a>
+
+            <a class="card" href="books/D&D 3.5 - Monster Manual.pdf" target="_blank">
+                  <img src="images/monstermanual.png" class="book-pic" alt="Monster Manual">
+                  <span>Monster Manual</span>
+            </a>
+
+            <a class="card" href="books/MonsterManualII (1).pdf" target="_blank">
+                  <img src="images/Monstermanual2.png" class="book-pic" alt="Monster Manual II">
+                  <span>Monster Manual II</span>
+            </a>
+
+            <a class="card" href="books/MonsterManualIII (1).pdf" target="_blank">
+                  <img src="images/mm3.png" class="book-pic" alt="Monster Manual III">
+                  <span>Monster Manual III</span>
+            </a>
+
+            <a class="card" href="books/MonsterManualIV (1).pdf" target="_blank">
+                  <img src="images/mm4.png" class="book-pic" alt="Monster Manual IV">
+                  <span>Monster Manual IV</span>
+            </a>
+
+            <a class="card" href="books/dungeonsdragonsdraconomicon.pdf" target="_blank">
+                  <img src="images/draconomicon.png" class="book-pic" alt="Draco-nomnomnom-icon">
+                  <span>Draconomicon</span>
+            </a>
+
+            <a class="card" href="books/D&D 3.5 - Heroes of Horror (1).pdf" target="_blank">
+                  <img src="images/heroes_of_horror.png" class="book-pic" alt="Heroes of Horror">
+                  <span>Heroes of Horror</span>
+            </a>
+
+            <a class="card" href="books/[D&D 3.5] Races of Destiny.pdf" target="_blank">
+                  <img src="images/Races_of_Destiny_cover.png" class="book-pic" alt="Races of Destiny">
+                  <span>Races of Destiny</span>
+            </a>
+
+            <a class="card" href="books/DnD 3.5 Frostburn.pdf" target="_blank">
+                  <img src="images/frostburn.png" class="book-pic" alt="Frostburn">
+                  <span>Frostburn</span>
+            </a>
+
+            <a class="card" href="books/Lords of Madness.pdf" target="_blank">
+                  <img src="images/lords_of_madness.png" class="book-pic" alt="Lords of Madness">
+                  <span>Lords of Madness</span>
+            </a>
+
+            <a class="card" href="books/Savage Species.pdf" target="_blank">
+                  <img src="images/Savage_Species.png" class="book-pic" alt="Savage Species">
+                  <span>Savage Species</span>
+            </a>
+
+            <a class="card" href="books/D&D - Fiend Folio.pdf" target="_blank">
+                  <img src="images/Fiendfolio.png" class="book-pic" alt="Fiend Folio">
+                  <span>Fiend Folio</span>
+            </a>
+
+            <!--<a class="card" href="" target="_blank">
+                  <img src="" class="" alt="">
+                  <span></span>
+            </a>-->
+      </div>
+
+      <button class="nav next" aria-label="Next" id="nextBtn">›</button>
+</div>
 
 
 
 
 
-    </div>
 
-
-
-
-
-
-    <div>
+<!--character generator-->
+<div>
       <h1 id="charGen">CHARACTER GENERATOR</h1>
-      <button id="genChar">NEW CHARACTER</button>
-      <div class="charGenBox"><p id="outputBox"></p></div>
-    </div>
+      <div class="charGenBox" id="charGenBox">
+            <p id="outputBox">Click here to generate a character!</p>
+      </div>
+</div>
+<!--character generator-->
+
+
 
 
 
     <h1 id="enemyGen">ENEMY GENERATOR</h1>
     <h1 id="mapGen">MAP GENERATOR</h1>
-    <h1 id="advGen">RANDOM ADVENTURES</h1>
+
+
+
+<!--adventure generator-->
+<div>
+      <h1 id="advGen">RANDOM ADVENTURES</h1>
+      <div class="random_adventures" id="random_adventures">
+            <p id="adventure_output_box">Click here to generate an adventure!</p>
+      </div>
+</div>
+<!--adventure generator-->
+
+
+
+
+
+
+
     <h1 id="roller">ROLLER</h1>
 
 

@@ -3,8 +3,8 @@ const class_list = ['Bard', 'Barbarian', 'Wizard', 'Rogue', 'Cleric', 'Paladin',
 const eyecolor_list = ['Blue', 'Gray', 'Brown', 'Black', 'Green', 'Yellow', 'Red', 'Orange', 'White', 'Purple'];
 const haircolor_list = ['Blue', 'Gray', 'Brown', 'Black', 'Green', 'Yellow', 'Red', 'Orange', 'White', 'Purple'];
 const level_list = ['1','2','3','4','5','6','7','8','9','10','11','12','13','14','15','16','17','18','19','20'];
-const mood_list = ['Angry','Sad','Happy','Afraid','Surprised','Disgusted','Contemptuous','Love','Lustful','Shy','Raging','Trustful','Anticipation','Indifference','Amused','Anxious','In Awe','Interested','Envious','Blah'];
-const personality_list = ['loyal and sensible','responsible and caring','humanitarian and pragmatic','logical and systematic','independent and spontaneous','introspective and creative','quiet and sensitive','curious and intellectual','free spirit','entertainer','innovative and endlessly positive','out of the box thinker and quiet','hard working and pragmatic','personable and go-getting','helper and networker','born leader','angry and spiteful','hateful and jealous','wrathful and vengeful','psychotic and unstable'];
+const mood_list = ['angry','sad','happy','afraid','surprised','disgusted','contemptuous','love','lustful','shy','rage','trustful','anticipatory','indifferent','amused','anxious','awe','interested','envious','blah'];
+const personality_list = ['loyal and sensible','responsible and caring','humanitarian and pragmatic','logical and systematic','independent and spontaneous','introspective and creative','quiet and sensitive','curious and intellectual','a free spirit','an entertainer','innovative and endlessly positive','an out of the box thinker and quiet','hard working and pragmatic','personable and go-getting','helpful and engaging','a born leader','angry and spiteful','hateful and jealous','wrathful and vengeful','psychotic and unstable'];
 const gender_list = ['Male', 'Female', 'Nonbinary'];
 
 
@@ -31,7 +31,7 @@ function generateOutput() {
 }
 
 // --- connect button ---
-document.getElementById("genChar").addEventListener("click", generateOutput);
+document.getElementById("charGenBox").addEventListener("click", generateOutput);
 
 
 
@@ -209,3 +209,127 @@ const githyanki = {
 }
 
 
+
+
+
+// for the random adventures
+
+const adventureIdeasList = [
+  "Abandon village is haunted by a restless spirit.",
+  "Abductions in the city lead to a cult.",
+  "Adventurers must retrieve a stolen artifact.",
+  "Ancient evil awakens beneath the town.",
+  "Assassins target a noble; PCs must protect him.",
+  "Bandits threaten trade routes.",
+  "Baron has gone mad; stop his tyranny.",
+  "Beast terrorizes countryside.",
+  "Break a siege laid on a friendly city.",
+  "Bridge collapse isolates a region.",
+  "Build an outpost in monster-infested territory.",
+  "Capture a notorious criminal.",
+  "City is overrun by vermin—unnatural cause suspected.",
+  "Clerics lose powers; find the reason.",
+  "Compete in a grand tournament.",
+  "Convince a dragon to aid a kingdom.",
+  "Cult attempts to summon a demon.",
+  "Curse afflicts a town; discover the source.",
+  "Darkness falls permanently on a region.",
+  "Defend a caravan from attacks.",
+  "Defend town from invading orcs.",
+  "Demons run rampant in the wilderness.",
+  "Destroy a vampire lord.",
+  "Diplomatic mission to hostile territory.",
+  "Discover source of poisoned well.",
+  "Disgraced noble seeks redemption.",
+  "Dragon demands tribute; deal with it.",
+  "Escort an important NPC.",
+  "Evacuate a village from natural disaster.",
+  "Evil artifact must be destroyed.",
+  "Expose a traitor in the king’s court.",
+  "Face trial for crimes you didn’t commit.",
+  "Find a lost explorer.",
+  "Find the cure for a strange disease.",
+  "Find the heir to a fallen house.",
+  "Fire ravages the countryside—arson suspected.",
+  "Follow map to legendary treasure.",
+  "Forbidden magic causes unnatural effects.",
+  "Free slaves from underground mines.",
+  "Fugitive hides in monster-infested forest.",
+  "Giant sea creature attacks ships.",
+  "Goblin uprising threatens region.",
+  "Haunted mansion holds family secrets.",
+  "Help a ghost find peace.",
+  "Hostage situation in a fortress.",
+  "Hunt the beast that killed a prince.",
+  "Important message must reach city fast.",
+  "Investigate mysterious disappearances.",
+  "Jewel heist points to insider job.",
+  "King cursed by a mysterious figure.",
+  "Liberate a temple from evil control.",
+  "Lost city found in the jungle.",
+  "Magical mishap alters reality.",
+  "Marauders raid coastal villages.",
+  "Merchant’s goods are cursed.",
+  "Messenger never arrived—find out why.",
+  "Mine collapses—workers trapped inside.",
+  "Missing children linked to fairy ring.",
+  "Monster terrorizes local farmlands.",
+  "Mysterious island appears off the coast.",
+  "Necromancer raises ancient army.",
+  "Noble's son joins evil cult.",
+  "Old prophecy foretells coming doom.",
+  "Oracle sends players on cryptic quest.",
+  "Outbreak of lycanthropy in city.",
+  "PCs framed for theft of artifact.",
+  "Pirates block important shipping lane.",
+  "Plague decimates city—find the cause.",
+  "Players inherit a haunted castle.",
+  "Poisoned crops spark famine.",
+  "Political unrest leads to civil war.",
+  "Powerful relic causes weather havoc.",
+  "Prevent assassination of a ruler.",
+  "Protect village during eclipse ritual.",
+  "Rare creature is dying out—protect it.",
+  "Rebel faction rises in remote area.",
+  "Recover a stolen spellbook.",
+  "Rescue a kidnapped noble.",
+  "Retrieve relic from cursed tomb.",
+  "Rival adventurers sabotage your mission.",
+  "Sacred spring dries up mysteriously.",
+  "Save an ancient tree spirit.",
+  "Scrying shows a looming disaster.",
+  "Sealed crypt starts leaking undead.",
+  "Secrets in dreams must be uncovered.",
+  "Seer’s death leads to cursed town.",
+  "Shipwreck survivors tell strange tales.",
+  "Solve a murder mystery.",
+  "Spirits of the past cry for justice.",
+  "Stop a rampaging elemental.",
+  "Stop volcano from erupting magically.",
+  "Storm spirits demand tribute.",
+  "Strange portal appears in wilderness.",
+  "Strangers arrive bearing dark tidings.",
+  "Take over command in losing battle.",
+  "Temple vanishes overnight.",
+  "Thieves’ guild war spills into streets.",
+  "Town celebrates eerie festival.",
+  "Train a militia to resist attack.",
+  "Travel to other plane to fix problem.",
+  "Trolls block crucial mountain pass.",
+  "Uncover ancient truth hidden in ruins.",
+  "Undead rise during full moon.",
+  "Village cursed to forget each day.",
+  "Warlord builds fortress—attack imminent.",
+  "Warriors return as ghostly avengers.",
+  "Weird dreams reveal ancient threat.",
+  "Wild magic zone expands dangerously.",
+  "Wizard tower erupts with chaos."
+];
+
+
+function generateAdventure() {
+  const randomAdventure = pickRandom(adventureIdeasList);
+  const randomAdventureResult = `${randomAdventure}`
+  document.getElementById("adventure_output_box").textContent = randomAdventureResult;
+}
+document.getElementById("random_adventures").addEventListener("click", generateAdventure);
