@@ -99,6 +99,7 @@ h1 {
   justify-content: center;
   transition: transform 0.1s ease, background-color 0.2s ease;
   box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+  font-weight: bold;
 }
 
 
@@ -127,6 +128,7 @@ h1 {
   justify-content: center;
   transition: transform 0.1s ease, background-color 0.2s ease;
   box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+  font-weight: bold;
 }
 
 #random_adventures:hover {
@@ -239,4 +241,32 @@ h1 {
 .card.active .book-pic {
   transform: scale(1.06);
   box-shadow: 0 14px 28px rgba(0,0,0,0.3);
+}
+
+
+
+
+#generateMonsterButton {
+  width: 520px;
+  height: 170px;
+  background-color: gold;
+  border: 5px solid black;
+  border-radius: 10px;
+  padding: 10px;
+  margin: 20px auto;
+  cursor: grabbing;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.1s ease, background-color 0.2s ease;
+  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+  font-weight: bold;
+}
+
+#generateMonsterButton:hover {
+  background-color: orange;
+}
+
+#generateMonsterButton:active {
+  transform: scale(0.98);
 }
