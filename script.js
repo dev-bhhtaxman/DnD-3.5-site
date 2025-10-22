@@ -6,26 +6,7 @@ const level_list = ['1','2','3','4','5','6','7','8','9','10','11','12','13','14'
 const mood_list = ['angry','sad','happy','afraid','surprised','disgusted','contemptuous','love','lustful','shy','rage','trustful','anticipatory','indifferent','amused','anxious','awe','interested','envious','blah'];
 const personality_list = ['loyal and sensible','responsible and caring','humanitarian and pragmatic','logical and systematic','independent and spontaneous','introspective and creative','quiet and sensitive','curious and intellectual','a free spirit','an entertainer','innovative and endlessly positive','an out of the box thinker and quiet','hard working and pragmatic','personable and go-getting','helpful and engaging','a born leader','angry and spiteful','hateful and jealous','wrathful and vengeful','psychotic and unstable'];
 const gender_list = ['Male', 'Female', 'Nonbinary'];
-
-
-
-// --- helper function ---
-function pickRandom(arr) {
-  return arr[Math.floor(Math.random() * arr.length)];
-}
-
-
-
-// --- main generator ---
-function generateOutput() {
-  const selectedClass = pickRandom(class_list);
-  const eyeColor = pickRandom(eyecolor_list);
-  const hairColor = pickRandom(haircolor_list);
-  const level = pickRandom(level_list);
-  const mood = pickRandom(mood_list);
-  const personality = pickRandom(personality_list);
-  const gender = pickRandom(gender_list);
-  const races = {
+const races = {
     'human': {
       Str: '',
       Dex: '',
@@ -189,6 +170,40 @@ function generateOutput() {
       Notes: 'Darkvision 60 ft. Natural armor +1, Psi-like abilities: daunt, dimension door, psionic teleport (levels vary), Level Adjustment +2'
     }
   };
+
+
+
+//function pickRandomRace(input) {
+  //if (Array.isArray(input)) {
+    //return input[Math.floor(Math.random() * input.length)];
+  //} else if (typeof input === 'object') {
+    //const keys = Object.keys(input);
+    //const randomKey = keys[Math.floor(Math.random() * keys.length)];
+    //return input[randomKey];
+  //} else {
+  //  throw new Error('pickRandomRace expects an array or object');
+//  }
+//}  
+
+
+
+// --- helper function ---
+function pickRandom(arr) {
+  return arr[Math.floor(Math.random() * arr.length)];
+}
+
+
+
+// --- main generator ---
+function generateOutput() {
+  const selectedClass = pickRandom(class_list);
+  const eyeColor = pickRandom(eyecolor_list);
+  const hairColor = pickRandom(haircolor_list);
+  const level = pickRandom(level_list);
+  const mood = pickRandom(mood_list);
+  const personality = pickRandom(personality_list);
+  const gender = pickRandom(gender_list);
+  const race = pickRandom
 
   
   const result = `${gender} Level ${level} ${selectedClass} with ${eyeColor} eyes, ${hairColor} hair, and feeling ${mood} while usually ${personality}.`;
