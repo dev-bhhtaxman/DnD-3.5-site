@@ -1025,7 +1025,15 @@ generateMonsterButton.addEventListener("click", () => {
 
 
 
+window.onload = function() {
+  const alertBox = document.getElementById("alertBox");
+  alertBox.style.display = "block";
 
+  // Hide the alert after 5 seconds (5000 milliseconds)
+  setTimeout(() => {
+    alertBox.style.display = "none";
+  }, 10000);
+};
 
 
 
