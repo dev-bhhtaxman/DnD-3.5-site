@@ -1066,12 +1066,11 @@ function showRandomImage() {
 
 document.getElementById("generateMap").addEventListener("click", () => {
   const biome = document.getElementById("biomeSelect").value;
-  const imageFolder = `map_images/${biome}/`;
+  const imageFolder = `images/map_images/${biome}/`;
   const totalTiles = 16;
   const availableTiles = 16;
 
   // Get the base URL for your GitHub Pages site
-  // Example: https://username.github.io/repo-name
   const baseURL = 'https://dev-bhhtaxman.github.io/DnD-3.5-site/';
 
   // Randomly pick 16 images from the chosen biome
