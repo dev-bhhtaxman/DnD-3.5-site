@@ -6,7 +6,7 @@ const level_list = ['1','2','3','4','5','6','7','8','9','10','11','12','13','14'
 const mood_list = ['angry','sad','happy','afraid','surprised','disgusted','contemptuous','love','lustful','shy','rage','trustful','anticipatory','indifferent','amused','anxious','awe','interested','envious','blah'];
 const personality_list = ['loyal and sensible','responsible and caring','humanitarian and pragmatic','logical and systematic','independent and spontaneous','introspective and creative','quiet and sensitive','curious and intellectual','a free spirit','an entertainer','innovative and endlessly positive','an out of the box thinker and quiet','hard working and pragmatic','personable and go-getting','helpful and engaging','a born leader','angry and spiteful','hateful and jealous','wrathful and vengeful','psychotic and unstable'];
 const gender_list = ['Male', 'Female', 'Nonbinary'];
-const races = {
+const race_list = {
     'human': {
       Str: '',
       Dex: '',
@@ -43,7 +43,7 @@ const races = {
       Cha: '',
       Notes: 'Small size, Low-light vision, +2 saving throws vs illusions, Speak with animals (burrowing mammals), +1 to DCs of illusion spells. Favored Class: Bard'
     },
-    'half_elf': {
+    'half-elf': {
       Str: '',
       Dex: '',
       Con: '',
@@ -52,7 +52,7 @@ const races = {
       Cha: '',
       Notes: '+1 Listen, Search, Spot, Immune to sleep spells, +2 Diplomacy, Gather Information, Low-light vision. Favored Class: Any'
     },
-    'half_orc': {
+    'half-orc': {
       Str: '+2',
       Dex: '',
       Con: '',
@@ -173,24 +173,21 @@ const races = {
 
 
 
-//function pickRandomRace(input) {
-  //if (Array.isArray(input)) {
-    //return input[Math.floor(Math.random() * input.length)];
-  //} else if (typeof input === 'object') {
-    //const keys = Object.keys(input);
-    //const randomKey = keys[Math.floor(Math.random() * keys.length)];
-    //return input[randomKey];
-  //} else {
-  //  throw new Error('pickRandomRace expects an array or object');
-//  }
-//}  
-
-
-
-// --- helper function ---
-function pickRandom(arr) {
-  return arr[Math.floor(Math.random() * arr.length)];
-}
+function pickRandom(input) {
+  if (Array.isArray(input)) {
+    // Handles lists like class_list, mood_list, etc.
+    return input[Math.floor(Math.random() * input.length)];
+  } 
+  else if (typeof input === 'object') {
+    // Handles race_list or any other keyed object
+    const keys = Object.keys(input);
+    const randomKey = keys[Math.floor(Math.random() * keys.length)];
+    return { key: randomKey, value: input[randomKey] };
+  } 
+  else {
+    throw new Error('pickRandom expects an array or object');
+  }
+} 
 
 
 
@@ -203,10 +200,13 @@ function generateOutput() {
   const mood = pickRandom(mood_list);
   const personality = pickRandom(personality_list);
   const gender = pickRandom(gender_list);
-  const race = pickRandom
+  const race = pickRandom(race_list);
 
   
-  const result = `${gender} Level ${level} ${selectedClass} with ${eyeColor} eyes, ${hairColor} hair, and feeling ${mood} while usually ${personality}.`;
+  const result = `${gender} ${race.key} Level ${level} ${selectedClass} with ${eyeColor} eyes, ${hairColor} hair, feeling ${mood} while usually ${personality}.\n\n` + 
+    `Race Stats: ${race.key}\n` +
+    JSON.stringify(race.value, null, 2);
+
   document.getElementById("outputBox").textContent = result;
 }
 
@@ -1031,6 +1031,25 @@ generateMonsterButton.addEventListener("click", () => {
 
 
 
+//roller: 
+
+
+const imageListRoller = [
+  'images/roller_images/1.png','images/roller_images/2.png', 'images/roller_images/3.png', 'images/roller_images/4.png', 'images/roller_images/5.png', 'images/roller_images/6.png',
+  'images/roller_images/7.png', 'images/roller_images/8.png', 'images/roller_images/9.png', 'images/roller_images/10.png', 'images/roller_images/11.png', 'images/roller_images/12.png',
+  'images/roller_images/13.png', 'images/roller_images/14.png', 'images/roller_images/15.png',  'images/roller_images/16.png', 'images/roller_images/17.png', 'images/roller_images/18.png',
+  'images/roller_images/19.png', 'images/roller_images/20.png'];
+
+
+function showRandomImage() {
+      const randomIndex = Math.floor(Math.random() * 20); // number 0–19
+      const selectedImage = imageListRoller[randomIndex];
+      const imageBoxRoller = document.getElementById('imageBoxRoller');
+      imageBoxRoller.innerHTML = `<img src="${selectedImage}" alt="Random Image">`;
+    }
+
+    // --- event listener ---
+    document.getElementById('imageBoxRoller').addEventListener('click', showRandomImage);
 
 
 
@@ -1038,17 +1057,18 @@ generateMonsterButton.addEventListener("click", () => {
 
 
 
+
+// ALert Button 
 
 
 window.onload = function() {
   const alertBox = document.getElementById("alertBox");
   alertBox.style.display = "block";
-
-  // Hide the alert after 5 seconds (5000 milliseconds)
   setTimeout(() => {
     alertBox.style.display = "none";
   }, 10000);
 };
+
 
 
 
