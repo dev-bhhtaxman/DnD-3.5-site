@@ -172,14 +172,12 @@ const race_list = {
   };
 
 
-
+// Randomness generator 
 function pickRandom(input) {
   if (Array.isArray(input)) {
-    // Handles lists like class_list, mood_list, etc.
     return input[Math.floor(Math.random() * input.length)];
   } 
   else if (typeof input === 'object') {
-    // Handles race_list or any other keyed object
     const keys = Object.keys(input);
     const randomKey = keys[Math.floor(Math.random() * keys.length)];
     return { key: randomKey, value: input[randomKey] };
@@ -209,8 +207,6 @@ function generateOutput() {
 
   document.getElementById("outputBox").textContent = result;
 }
-
-// --- connect button ---
 document.getElementById("charGenBox").addEventListener("click", generateOutput);
 
 
@@ -345,9 +341,6 @@ document.getElementById("random_adventures").addEventListener("click", generateA
 
 
 // enemies list for generator
-
-//Monster Manual I
-
 const monsters = [
   {"name": "Aboleth", "CR": "7", "book": "Monster Manual I", "page": "9"},
   {"name": "Achaierai", "CR": "9", "book": "Monster Manual I", "page": "10"},
@@ -1012,6 +1005,8 @@ const monsters = [
 ]
 ///Monster Manual IV above
 
+
+//Monster Generator
 const generateMonsterButton = document.getElementById("generateMonsterButton");
 const crSelect = document.getElementById("crSelect");
 
@@ -1031,9 +1026,11 @@ generateMonsterButton.addEventListener("click", () => {
 
 
 
+
+
+
+
 //roller: 
-
-
 const imageListRoller = [
   'images/roller_images/1.png','images/roller_images/2.png', 'images/roller_images/3.png', 'images/roller_images/4.png', 'images/roller_images/5.png', 'images/roller_images/6.png',
   'images/roller_images/7.png', 'images/roller_images/8.png', 'images/roller_images/9.png', 'images/roller_images/10.png', 'images/roller_images/11.png', 'images/roller_images/12.png',
@@ -1047,9 +1044,87 @@ function showRandomImage() {
       const imageBoxRoller = document.getElementById('imageBoxRoller');
       imageBoxRoller.innerHTML = `<img src="${selectedImage}" alt="Random Image">`;
     }
-
-    // --- event listener ---
     document.getElementById('imageBoxRoller').addEventListener('click', showRandomImage);
+
+
+
+//map generator:
+// 
+// the random generator will choose an image sixteen times and be placed in a list
+// each image must be put next to each other in a grid formation:
+//  
+//  [0],[1],[2],[3],
+//  [4],[5],[6],[7],
+//  [8],[9],[10],[11],
+//  [12],[13],[14],[15]
+//
+//  this creates a grid by which the user can see a map.
+//  the output will be placed in a different tab. 
+//  
+//  the user can choose from badlands, caves, desert, forest, grassland, jungle, and snowy.
+
+
+document.getElementById("generateMap").addEventListener("click", () => {
+  const biome = document.getElementById("biomeSelect").value;
+  const imageFolder = `map_images/${biome}/`;
+  const totalTiles = 16; // number of tiles to display
+  const availableTiles = 16; // number of images per folder
+
+  // Randomly pick 16 images from the chosen biome
+  const selectedImages = [];
+  for (let i = 0; i < totalTiles; i++) {
+    const randomNum = Math.floor(Math.random() * availableTiles) + 1;
+    selectedImages.push(`${imageFolder}${randomNum}.png`);
+  }
+
+  // HTML for the new map window
+  let mapHTML = `
+    <html>
+      <head>
+        <title>${biome.charAt(0).toUpperCase() + biome.slice(1)} Map</title>
+        <style>
+          body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #222;
+          }
+          .grid {
+            display: grid;
+            grid-template-columns: repeat(4, 100px);
+            grid-template-rows: repeat(4, 100px);
+            gap: 2px;
+          }
+          .grid img {
+            width: 100px;
+            height: 100px;
+            object-fit: cover;
+            border: 1px solid #444;
+          }
+          h2 {
+            color: white;
+            text-align: center;
+          }
+        </style>
+      </head>
+      <body>
+        <div>
+          <h2>${biome.charAt(0).toUpperCase() + biome.slice(1)} Map</h2>
+          <div class="grid">
+            ${selectedImages.map(img => `<img src="${img}">`).join('')}
+          </div>
+        </div>
+      </body>
+    </html>
+  `;
+
+  // Open the map in a new tab
+  const newTab = window.open();
+  newTab.document.open();
+  newTab.document.write(mapHTML);
+  newTab.document.close();
+});
 
 
 
@@ -1059,8 +1134,6 @@ function showRandomImage() {
 
 
 // ALert Button 
-
-
 window.onload = function() {
   const alertBox = document.getElementById("alertBox");
   alertBox.style.display = "block";
