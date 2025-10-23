@@ -1067,28 +1067,38 @@ function showRandomImage() {
 document.getElementById("generateMap").addEventListener("click", () => {
   const biome = document.getElementById("biomeSelect").value;
   const imageFolder = `map_images/${biome}/`;
-  const totalTiles = 16; // number of tiles to display
-  const availableTiles = 16; // number of images per folder
+  const totalTiles = 16;
+  const availableTiles = 16;
+
+  // Get the base URL for your GitHub Pages site
+  // Example: https://username.github.io/repo-name
+  const baseURL = 'https://dev-bhhtaxman.github.io/DnD-3.5-site/';
 
   // Randomly pick 16 images from the chosen biome
   const selectedImages = [];
   for (let i = 0; i < totalTiles; i++) {
     const randomNum = Math.floor(Math.random() * availableTiles) + 1;
-    selectedImages.push(`${imageFolder}${randomNum}.png`);
+    selectedImages.push(`${baseURL}${imageFolder}${randomNum}.jpg`);
   }
 
-  // HTML for the new map window
-  let mapHTML = `
-    <html>
+  // Build HTML for the new tab
+  const mapHTML = `
+    <!DOCTYPE html>
+    <html lang="en">
       <head>
+        <meta charset="UTF-8">
         <title>${biome.charAt(0).toUpperCase() + biome.slice(1)} Map</title>
         <style>
           body {
             display: flex;
+            flex-direction: column;
             justify-content: center;
             align-items: center;
             height: 100vh;
+            margin: 0;
             background-color: #222;
+            color: white;
+            font-family: Arial, sans-serif;
           }
           .grid {
             display: grid;
@@ -1102,28 +1112,35 @@ document.getElementById("generateMap").addEventListener("click", () => {
             object-fit: cover;
             border: 1px solid #444;
           }
-          h2 {
+          button {
+            margin-top: 20px;
+            padding: 8px 16px;
+            font-size: 14px;
+            cursor: pointer;
+            border: none;
+            border-radius: 4px;
+            background-color: #555;
             color: white;
-            text-align: center;
+          }
+          button:hover {
+            background-color: #777;
           }
         </style>
       </head>
       <body>
-        <div>
-          <h2>${biome.charAt(0).toUpperCase() + biome.slice(1)} Map</h2>
-          <div class="grid">
-            ${selectedImages.map(img => `<img src="${img}">`).join('')}
-          </div>
+        <h2>${biome.charAt(0).toUpperCase() + biome.slice(1)} Map</h2>
+        <div class="grid">
+          ${selectedImages.map(img => `<img src="${img}" alt="tile">`).join('')}
         </div>
+        <button onclick="window.close()">Close Map</button>
       </body>
     </html>
   `;
 
-  // Open the map in a new tab
-  const newTab = window.open();
-  newTab.document.open();
-  newTab.document.write(mapHTML);
-  newTab.document.close();
+  // Open using modern Blob approach (still static-safe)
+  const blob = new Blob([mapHTML], { type: 'text/html' });
+  const url = URL.createObjectURL(blob);
+  window.open(url, '_blank');
 });
 
 
