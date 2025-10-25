@@ -267,7 +267,7 @@ const adventureIdeasList = [
   "Shipwreck survivors tell strange tales.",
   "Solve a murder mystery.",
   "Spirits of the past cry for justice.",
-  "Stop a rampaging elemental-,
+  "Stop a rampaging elemental from destroying a village.",
   "Stop volcano from erupting magically.",
   "Storm spirits demand tribute.",
   "Strange portal appears in wilderness.",
