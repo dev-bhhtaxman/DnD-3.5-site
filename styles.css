@@ -10,9 +10,15 @@ h1 {
 
 .firstbox {
   background-color: gold;
+  color: black;
   width: 100%;
   height: 50px;
-  color: black;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  white-space: nowrap;
 }
 
 
@@ -361,4 +367,8 @@ body::before {
 
 #biomeSelect {
   background-color: gold;
+}
+
+#crSelect {
+  background-color: #f7c600;
 }
