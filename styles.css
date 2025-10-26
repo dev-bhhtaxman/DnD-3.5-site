@@ -408,3 +408,36 @@ body::before {
   50%  { background-color: lightblue; }
   100% { background-color: gold; }
 }
+
+#intro-dragon {
+  position: fixed;
+  inset: 0;
+  background: radial-gradient(circle, #000 40%, #300 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 9999;
+  overflow: hidden;
+}
+
+.dragon {
+  width: 300px;
+  transform: scale(0.5) rotate(5deg) translateY(100px);
+  transition: transform 3s ease-in-out;
+}
+
+.dragon.attack {
+  transform: scale(5) rotate(0deg) translateY(-10vh);
+}
+
+@keyframes shake {
+  0%, 100% { transform: translate(0); }
+  20% { transform: translate(-5px, 5px); }
+  40% { transform: translate(5px, -5px); }
+  60% { transform: translate(-5px, -5px); }
+  80% { transform: translate(5px, 5px); }
+}
+
+.dragon.attack ~ #site-content {
+  animation: shake 0.5s infinite;
+}

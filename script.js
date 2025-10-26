@@ -1316,3 +1316,16 @@ document.getElementById("generateMap").addEventListener("click", () => {
       alertBox.style.display = "none";
     }, 10000);
   };
+
+
+
+
+  window.addEventListener('load', () => {
+  const dragon = document.querySelector('.dragon');
+  const site = document.getElementById('site-content');
+  setTimeout(() => dragon.classList.add('attack'), 500);
+  setTimeout(() => {
+    document.getElementById('intro-dragon').style.display = 'none';
+    site.style.display = 'block';
+    }, 4000); // 4 seconds later
+    });
