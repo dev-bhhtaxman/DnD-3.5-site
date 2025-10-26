@@ -4,10 +4,6 @@
   transition: left 0.3s;
 }
 
-h1 {
-  text-align: center;
-}
-
 .firstbox {
   background-color: gold;
   color: black;
@@ -45,6 +41,10 @@ h1 {
 }
 
 
+html, body {
+  margin: 0;
+  padding: 0;
+}
 
 
 
@@ -81,7 +81,9 @@ h1 {
 
 h1 {
   background-color: brown;
+  width: 100vw;
   margin: 0;
+  text-align: center;
 }
 
 .flex-container {
