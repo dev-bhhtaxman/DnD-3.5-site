@@ -84,6 +84,12 @@ h1 {
   width: 100vw;
   margin: 0;
   text-align: center;
+  color: gold;
+  text-shadow:
+    0 0 5px silver,
+    0 0 10px orange,
+    0 0 20px red;
+  animation: glow 2s ease-in-out infinite alternate;
 }
 
 .flex-container {
