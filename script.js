@@ -1,400 +1,226 @@
+console.log("enemyGen.js loaded");
+
+const tocLinks = document.querySelectorAll('.left-page a');
+const pages = document.querySelectorAll('.right-page');
+
+tocLinks.forEach(link => {
+  link.addEventListener('click', (e) => {
+    e.preventDefault();
+
+    const targetId = link.getAttribute('data-page');
+    const newPage = document.getElementById(targetId);
+    const currentPage = Array.from(pages).find(p => !p.classList.contains('hidden'));
+
+    if (currentPage === newPage) return;
+
+    if (currentPage) {
+      currentPage.classList.add('turning-out');
+      currentPage.addEventListener('animationend', function handleOut() {
+        currentPage.classList.add('hidden');
+        currentPage.classList.remove('turning-out');
+        currentPage.removeEventListener('animationend', handleOut);
+
+        newPage.classList.remove('hidden');
+        newPage.classList.add('turning-in');
+        newPage.addEventListener('animationend', function handleIn() {
+          newPage.classList.remove('turning-in');
+          newPage.removeEventListener('animationend', handleIn);
+        });
+      });
+    } else {
+      newPage.classList.remove('hidden');
+      newPage.classList.add('turning-in');
+      newPage.addEventListener('animationend', function handleIn() {
+        newPage.classList.remove('turning-in');
+        newPage.removeEventListener('animationend', handleIn);
+      });
+    }
+  });
+});
+
+
+// EVERYTHING ABOVE THIS LINE IS FOR THE PAGE OPERATIONS
+
+
 // --- data lists ---
-const class_list = ['Bard', 'Barbarian', 'Wizard', 'Rogue', 'Cleric', 'Paladin', 'Fighter', 'Ranger', 'Druid', 'Monk', 'Sorcerer'];
-const eyecolor_list = ['Blue', 'Gray', 'Brown', 'Black', 'Green', 'Yellow', 'Red', 'Orange', 'White', 'Purple'];
-const haircolor_list = ['Blue', 'Gray', 'Brown', 'Black', 'Green', 'Yellow', 'Red', 'Orange', 'White', 'Purple'];
-const level_list = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20'];
-const mood_list = ['angry', 'sad', 'happy', 'afraid', 'surprised', 'disgusted', 'contemptuous', 'love', 'lustful', 'shy', 'rage', 'trustful', 'anticipatory', 'indifferent', 'amused', 'anxious', 'awe', 'interested', 'envious', 'blah'];
-const personality_list = ['loyal and sensible', 'responsible and caring', 'humanitarian and pragmatic', 'logical and systematic', 'independent and spontaneous', 'introspective and creative', 'quiet and sensitive', 'curious and intellectual', 'a free spirit', 'an entertainer', 'innovative and endlessly positive', 'an out of the box thinker and quiet', 'hard working and pragmatic', 'personable and go-getting', 'helpful and engaging', 'a born leader', 'angry and spiteful', 'hateful and jealous', 'wrathful and vengeful', 'psychotic and unstable'];
-const gender_list = ['Male', 'Female', 'Nonbinary'];
-const race_list = {
-  'human': {
-    Notes: '+1 feat at 1st level, 4 bonus skill points at 1st level, +1 per level thereafter, Favored Class: Any'
-  },
-  'dwarf': {
-    Str: '+2',
-    Cha: '-2',
-    Notes: 'Darkvision 60 ft. Stonecunning, weapon familiarity (dwarven weapons), stability, +2 vs poison, spells, and spell-like effects. Favored Class: Fighter'
-  },
-  'elf': {
-    Dex: '+2',
-    Con: '-2',
-    Notes: 'Low-light vision, Proficient with longsword, rapier, longbow, and shortbow, Immune to magic sleep; +2 vs enchantments, +2 Listen, Search, Spot. Favored Class: Wizard'
-  },
-  'gnome': {
-    Str: '-2',
-    Con: '+2',
-    Notes: 'Small size, Low-light vision, +2 saving throws vs illusions, Speak with animals (burrowing mammals), +1 to DCs of illusion spells. Favored Class: Bard'
-  },
-  'half-elf': {
-    Notes: '+1 Listen, Search, Spot, Immune to sleep spells, +2 Diplomacy, Gather Information, Low-light vision. Favored Class: Any'
-  },
-  'half-orc': {
-    Str: '+2',
-    Int: '-2',
-    Cha: '-2',
-    Notes: 'Darkvision 60 ft. Favored Class: Barbarian'
-  },
-  'halfling': {
-    Str: '-2',
-    Dex: '+2',
-    Notes: 'Small size, +1 all saving throws, +2 Climb, Jump, Move Silently. Favored Class: Rogue'
-  },
-  'goblin': {
-    Str: '-2',
-    Dex: '+2',
-    Cha: '-2',
-    Notes: 'Small humanoid, +4 Move Silently, Darkvision 60 ft. +1 racial bonus on Ride and Move Silently'
-  },
-  'orc': {
-    Str: '+4',
-    Int: '-2',
-    Wis: '-2',
-    Cha: '-2',
-    Notes: 'Darkvision 60 ft. Light sensitivity'
-  },
-  'kobold': {
-    Str: '-4',
-    Dex: '+2',
-    Con: '-2',
-    Notes: 'Darkvision 60 ft. +1 Craft (trapmaking), Profession (miner), Search (stonework)'
-  },
-  'gnoll': {
-    Str: '+2',
-    Int: '-2',
-    Notes: 'Darkvision 60 ft.'
-  },
-  'lizardfolk': {
-    Str: '+2',
-    Con: '+2',
-    Int: '-2',
-    Notes: 'Natural armor +5, swim speed 15 ft.'
-  },
-  'merfolk': {
-    Str: '-2',
-    Dex: '+2',
-    Notes: 'Swim speed 50 ft., low-light vision, Amphibious (can breathe air and water)'
-  },
-  'troglodyte': {
-    Str: '+4',
-    Dex: '-2',
-    Con: '+4',
-    Int: '-2',
-    Cha: '-2',
-    Notes: 'Darkvision 90 ft., stench aura, Natural armor +6'
-  },
-  'aasimar': {
-    Wis: '+2',
-    Cha: '+2',
-    Notes: 'Darkvision 60 ft., daylight 1/day, Resistance to acid, cold, electricity 5. Favored Class: Paladin Level Adjust +1'
-  },
-  'tiefling': {
-    Dex: '+2',
-    Int: '+2',
-    Cha: '-2',
-    Notes: 'Darkvision 60 ft., darkness 1/day, Resistance to cold, fire, electricity 5. Favored Class: Rogue, Level Adjustment +1'
-  },
-  'drow': {
-    Dex: '+2',
-    Con: '-2',
-    Int: '+2',
-    Cha: '+2',
-    Notes: 'Darkvision 120 ft., spell resistance, light blindness, Spell-like abilities: dancing lights, darkness, faerie fire, Proficient with rapiers, longswords, hand crossbows, Level Adjustment +2'
-  },
-  'githyanki': {
-    Dex: '+2',
-    Wis: '-2',
-    Notes: 'Darkvision 60 ft. Natural armor +1, Psi-like abilities: daunt, dimension door, psionic teleport (levels vary), Level Adjustment +2'
-  },
-  'azer': {
-    Str: '+2',
-    Dex: '+2',
-    Con: '+2',
-    Int: '+2',
-    Wis: '+2',
-    Cha: '-2',
-    Notes: 'Darkvision 60 ft. Natural armor +6, Special attack (Heat), Immune to fire, SR 13 + class level, Vulnerable to Cold, Level Adjustment +4'
-  },
-  'bugbear': {
-    Str: '+4',
-    Dex: '+2',
-    Con: '+2',
-    Cha: '-2',
-    Notes: 'Darkvision 60 ft. Natural armor +3, Level Adjustment +1'
-  },
-  'centaur': {
-    Str: '+8',
-    Dex: '+4',
-    Con: '+4',
-    Int: '-2',
-    Wis: '+2',
-    Notes: 'Large sized, Space/Reach 10ft/5ft, Speed 50 ft. Darkvision 60 ft, Natural armor +3, Level Adjustment +2'
+document.addEventListener("DOMContentLoaded", () => {
+  const class_list = ['Bard', 'Barbarian', 'Wizard', 'Rogue', 'Cleric', 'Paladin', 'Fighter', 'Ranger', 'Druid', 'Monk', 'Sorcerer'];
+  const eyecolor_list = ['Blue', 'Gray', 'Brown', 'Black', 'Green', 'Yellow', 'Red', 'Orange', 'White', 'Purple'];
+  const haircolor_list = ['Blue', 'Gray', 'Brown', 'Black', 'Green', 'Yellow', 'Red', 'Orange', 'White', 'Purple'];
+  const level_list = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16', '17', '18', '19', '20'];
+  const mood_list = ['angry', 'sad', 'happy', 'afraid', 'surprised', 'disgusted', 'contemptuous', 'love', 'lustful', 'shy', 'rage', 'trustful', 'anticipatory', 'indifferent', 'amused', 'anxious', 'awe', 'interested', 'envious', 'blah'];
+  const personality_list = ['loyal and sensible', 'responsible and caring', 'humanitarian and pragmatic', 'logical and systematic', 'independent and spontaneous', 'introspective and creative', 'quiet and sensitive', 'curious and intellectual', 'a free spirit', 'an entertainer', 'innovative and endlessly positive', 'an out of the box thinker and quiet', 'hard working and pragmatic', 'personable and go-getting', 'helpful and engaging', 'a born leader', 'angry and spiteful', 'hateful and jealous', 'wrathful and vengeful', 'psychotic and unstable'];
+  const gender_list = ['Male', 'Female', 'Nonbinary'];
+  const race_list = {
+    'human': {
+      Notes: '+1 feat at 1st level, 4 bonus skill points at 1st level, +1 per level thereafter, Favored Class: Any'
+    },
+    'dwarf': {
+      Str: '+2',
+      Cha: '-2',
+      Notes: 'Darkvision 60 ft. Stonecunning, weapon familiarity (dwarven weapons), stability, +2 vs poison, spells, and spell-like effects. Favored Class: Fighter'
+    },
+    'elf': {
+      Dex: '+2',
+      Con: '-2',
+      Notes: 'Low-light vision, Proficient with longsword, rapier, longbow, and shortbow, Immune to magic sleep; +2 vs enchantments, +2 Listen, Search, Spot. Favored Class: Wizard'
+    },
+    'gnome': {
+      Str: '-2',
+      Con: '+2',
+      Notes: 'Small size, Low-light vision, +2 saving throws vs illusions, Speak with animals (burrowing mammals), +1 to DCs of illusion spells. Favored Class: Bard'
+    },
+    'half-elf': {
+      Notes: '+1 Listen, Search, Spot, Immune to sleep spells, +2 Diplomacy, Gather Information, Low-light vision. Favored Class: Any'
+    },
+    'half-orc': {
+      Str: '+2',
+      Int: '-2',
+      Cha: '-2',
+      Notes: 'Darkvision 60 ft. Favored Class: Barbarian'
+    },
+    'halfling': {
+      Str: '-2',
+      Dex: '+2',
+      Notes: 'Small size, +1 all saving throws, +2 Climb, Jump, Move Silently. Favored Class: Rogue'
+    },
+    'goblin': {
+      Str: '-2',
+      Dex: '+2',
+      Cha: '-2',
+      Notes: 'Small humanoid, +4 Move Silently, Darkvision 60 ft. +1 racial bonus on Ride and Move Silently'
+    },
+    'orc': {
+      Str: '+4',
+      Int: '-2',
+      Wis: '-2',
+      Cha: '-2',
+      Notes: 'Darkvision 60 ft. Light sensitivity'
+    },
+    'kobold': {
+      Str: '-4',
+      Dex: '+2',
+      Con: '-2',
+      Notes: 'Darkvision 60 ft. +1 Craft (trapmaking), Profession (miner), Search (stonework)'
+    },
+    'gnoll': {
+      Str: '+2',
+      Int: '-2',
+      Notes: 'Darkvision 60 ft.'
+    },
+    'lizardfolk': {
+      Str: '+2',
+      Con: '+2',
+      Int: '-2',
+      Notes: 'Natural armor +5, swim speed 15 ft.'
+    },
+    'merfolk': {
+      Str: '-2',
+      Dex: '+2',
+      Notes: 'Swim speed 50 ft., low-light vision, Amphibious (can breathe air and water)'
+    },
+    'troglodyte': {
+      Str: '+4',
+      Dex: '-2',
+      Con: '+4',
+      Int: '-2',
+      Cha: '-2',
+      Notes: 'Darkvision 90 ft., stench aura, Natural armor +6'
+    },
+    'aasimar': {
+      Wis: '+2',
+      Cha: '+2',
+      Notes: 'Darkvision 60 ft., daylight 1/day, Resistance to acid, cold, electricity 5. Favored Class: Paladin Level Adjust +1'
+    },
+    'tiefling': {
+      Dex: '+2',
+      Int: '+2',
+      Cha: '-2',
+      Notes: 'Darkvision 60 ft., darkness 1/day, Resistance to cold, fire, electricity 5. Favored Class: Rogue, Level Adjustment +1'
+    },
+    'drow': {
+      Dex: '+2',
+      Con: '-2',
+      Int: '+2',
+      Cha: '+2',
+      Notes: 'Darkvision 120 ft., spell resistance, light blindness, Spell-like abilities: dancing lights, darkness, faerie fire, Proficient with rapiers, longswords, hand crossbows, Level Adjustment +2'
+    },
+    'githyanki': {
+      Dex: '+2',
+      Wis: '-2',
+      Notes: 'Darkvision 60 ft. Natural armor +1, Psi-like abilities: daunt, dimension door, psionic teleport (levels vary), Level Adjustment +2'
+    },
+    'azer': {
+      Str: '+2',
+      Dex: '+2',
+      Con: '+2',
+      Int: '+2',
+      Wis: '+2',
+      Cha: '-2',
+      Notes: 'Darkvision 60 ft. Natural armor +6, Special attack (Heat), Immune to fire, SR 13 + class level, Vulnerable to Cold, Level Adjustment +4'
+    },
+    'bugbear': {
+      Str: '+4',
+      Dex: '+2',
+      Con: '+2',
+      Cha: '-2',
+      Notes: 'Darkvision 60 ft. Natural armor +3, Level Adjustment +1'
+    },
+    'centaur': {
+      Str: '+8',
+      Dex: '+4',
+      Con: '+4',
+      Int: '-2',
+      Wis: '+2',
+      Notes: 'Large sized, Space/Reach 10ft/5ft, Speed 50 ft. Darkvision 60 ft, Natural armor +3, Level Adjustment +2'
+    }
+  };
+
+
+  // Randomness generator 
+  function pickRandom(input) {
+    if (Array.isArray(input)) {
+      return input[Math.floor(Math.random() * input.length)];
+    }
+    else if (typeof input === 'object') {
+      const keys = Object.keys(input);
+      const randomKey = keys[Math.floor(Math.random() * keys.length)];
+      return { key: randomKey, value: input[randomKey] };
+    }
+    else {
+      throw new Error('pickRandom expects an array or object');
+    }
   }
-};
 
 
-// Randomness generator 
-function pickRandom(input) {
-  if (Array.isArray(input)) {
-    return input[Math.floor(Math.random() * input.length)];
+
+  // --- main generator ---
+  function generateOutput() {
+    const selectedClass = pickRandom(class_list);
+    const eyeColor = pickRandom(eyecolor_list);
+    const hairColor = pickRandom(haircolor_list);
+    const level = pickRandom(level_list);
+    const mood = pickRandom(mood_list);
+    const personality = pickRandom(personality_list);
+    const gender = pickRandom(gender_list);
+    const race = pickRandom(race_list);
+
+
+    const result = `A ${gender}, ${race.key}, level ${level} ${selectedClass} with ${eyeColor} eyes, ${hairColor} hair, feeling ${mood} while usually ${personality}.\n\n` +
+      `Race Stats: ${race.key}\n` +
+      JSON.stringify(race.value, null, 2);
+
+    document.getElementById("outputBox").textContent = result;
   }
-  else if (typeof input === 'object') {
-    const keys = Object.keys(input);
-    const randomKey = keys[Math.floor(Math.random() * keys.length)];
-    return { key: randomKey, value: input[randomKey] };
+
+  const box = document.getElementById("charGenBox");
+  if (box) {
+    box.addEventListener("click", generateOutput);
   }
-  else {
-    throw new Error('pickRandom expects an array or object');
-  }
-}
+  document.getElementById("charGenBox").addEventListener("click", generateOutput);
 
+});
 
-
-// --- main generator ---
-function generateOutput() {
-  const selectedClass = pickRandom(class_list);
-  const eyeColor = pickRandom(eyecolor_list);
-  const hairColor = pickRandom(haircolor_list);
-  const level = pickRandom(level_list);
-  const mood = pickRandom(mood_list);
-  const personality = pickRandom(personality_list);
-  const gender = pickRandom(gender_list);
-  const race = pickRandom(race_list);
-
-
-  const result = `A ${gender}, ${race.key}, level ${level} ${selectedClass} with ${eyeColor} eyes, ${hairColor} hair, feeling ${mood} while usually ${personality}.\n\n` +
-    `Race Stats: ${race.key}\n` +
-    JSON.stringify(race.value, null, 2);
-
-  document.getElementById("outputBox").textContent = result;
-}
-document.getElementById("charGenBox").addEventListener("click", generateOutput);
-
-
-
-
-
-
-
-// for the random adventures
-
-const adventureIdeasList = [
-  "Abandon village is haunted by a restless spirit.",
-  "Abductions in the city lead to a cult.",
-  "Adventurers must retrieve a stolen artifact.",
-  "Ancient evil awakens beneath the town.",
-  "Assassins target a noble; PCs must protect him.",
-  "Bandits threaten trade routes.",
-  "Baron has gone mad; stop his tyranny.",
-  "Beast terrorizes countryside.",
-  "Break a siege laid on a friendly city.",
-  "Bridge collapse isolates a region.",
-  "Build an outpost in monster-infested territory.",
-  "Capture a notorious criminal.",
-  "City is overrun by vermin—unnatural cause suspected.",
-  "Clerics lose powers; find the reason.",
-  "Compete in a grand tournament.",
-  "Convince a dragon to aid a kingdom.",
-  "Cult attempts to summon a demon.",
-  "Curse afflicts a town; discover the source.",
-  "Darkness falls permanently on a region.",
-  "Defend a caravan from attacks.",
-  "Defend town from invading orcs.",
-  "Demons run rampant in the wilderness.",
-  "Destroy a vampire lord.",
-  "Diplomatic mission to hostile territory.",
-  "Discover source of poisoned well.",
-  "Disgraced noble seeks redemption.",
-  "Dragon demands tribute; deal with it.",
-  "Escort an important NPC.",
-  "Evacuate a village from natural disaster.",
-  "Evil artifact must be destroyed.",
-  "Expose a traitor in the king’s court.",
-  "Face trial for crimes you didn’t commit.",
-  "Find a lost explorer.",
-  "Find the cure for a strange disease.",
-  "Find the heir to a fallen house.",
-  "Fire ravages the countryside—arson suspected.",
-  "Follow map to legendary treasure.",
-  "Forbidden magic causes unnatural effects.",
-  "Free slaves from underground mines.",
-  "Fugitive hides in monster-infested forest.",
-  "Giant sea creature attacks ships.",
-  "Goblin uprising threatens region.",
-  "Haunted mansion holds family secrets.",
-  "Help a ghost find peace.",
-  "Hostage situation in a fortress.",
-  "Hunt the beast that killed a prince.",
-  "Important message must reach city fast.",
-  "Investigate mysterious disappearances.",
-  "Jewel heist points to insider job.",
-  "King cursed by a mysterious figure.",
-  "Liberate a temple from evil control.",
-  "Lost city found in the jungle.",
-  "Magical mishap alters reality.",
-  "Marauders raid coastal villages.",
-  "Merchant’s goods are cursed.",
-  "Messenger never arrived—find out why.",
-  "Mine collapses—workers trapped inside.",
-  "Missing children linked to fairy ring.",
-  "Monster terrorizes local farmlands.",
-  "Mysterious island appears off the coast.",
-  "Necromancer raises ancient army.",
-  "Noble's son joins evil cult.",
-  "Old prophecy foretells coming doom.",
-  "Oracle sends players on cryptic quest.",
-  "Outbreak of lycanthropy in city.",
-  "PCs framed for theft of artifact.",
-  "Pirates block important shipping lane.",
-  "Plague decimates city—find the cause.",
-  "Players inherit a haunted castle.",
-  "Poisoned crops spark famine.",
-  "Political unrest leads to civil war.",
-  "Powerful relic causes weather havoc.",
-  "Prevent assassination of a ruler.",
-  "Protect village during eclipse ritual.",
-  "Rare creature is dying out—protect it.",
-  "Rebel faction rises in remote area.",
-  "Recover a stolen spellbook.",
-  "Rescue a kidnapped noble.",
-  "Retrieve relic from cursed tomb.",
-  "Rival adventurers sabotage your mission.",
-  "Sacred spring dries up mysteriously.",
-  "Save an ancient tree spirit.",
-  "Scrying shows a looming disaster.",
-  "Sealed crypt starts leaking undead.",
-  "Secrets in dreams must be uncovered.",
-  "Seer’s death leads to cursed town.",
-  "Shipwreck survivors tell strange tales.",
-  "Solve a murder mystery.",
-  "Spirits of the past cry for justice.",
-  "Stop a rampaging elemental from destroying a village.",
-  "Stop volcano from erupting magically.",
-  "Storm spirits demand tribute.",
-  "Strange portal appears in wilderness.",
-  "Strangers arrive bearing dark tidings.",
-  "Take over command in losing battle.",
-  "Temple vanishes overnight.",
-  "Thieves’ guild war spills into streets.",
-  "Town celebrates eerie festival.",
-  "Train a militia to resist attack.",
-  "Travel to other plane to fix problem.",
-  "Trolls block crucial mountain pass.",
-  "Uncover ancient truth hidden in ruins.",
-  "Undead rise during full moon.",
-  "Village cursed to forget each day.",
-  "Warlord builds fortress—attack imminent.",
-  "Warriors return as ghostly avengers.",
-  "Weird dreams reveal ancient threat.",
-  "Wild magic zone expands dangerously.",
-  "Wizard tower erupts with chaos.",
-  "A 31st-level balor sorcerer imprisons old friends of the player characters, holding them hostage in return for a service.",
-  "A band of epic death slaadi rogues and sorcerers begins to waylay all planar travelers who chance through their recently claimed turf on the Astral Plane.",
-  "A ranger hero recognized around the world begins to organize a group of explorers for reasons unknown.",
-  "A bard college develops a style of music that charms and dominates any that listen to it too long.",
-  "A beholder cluster made up of paragon beholders begins to war with lesser beholder communities, apparently all seeking a beholder artifact.",
-  "A prominent deity sickens and will die if the cause of its divine malady is not discovered.",
-  "A beloved prophecy long accepted as true fails to occur because of the characters’ meddling, and the world turns against them.",
-  "A blinding, yellow haze seeps down from the sky, covering the world.",
-  "A celestial tree hundreds of miles long reaches its roots down and begins to grow on the world’s surface; creatures from other worlds live in the heights of the tree.",
-  "A child is born who prophecy indicates will one day ascend to godhood.",
-  "A circle of brown blights the forest, killing all vegetation as it continues to expand without limit at an ever-accelerating rate.",
-  "A clan of psionic militants breaks away from the kingdom — literally. A huge chunk of land hundreds of acres wide floats up and away (taking with it many terrified nonpsionic people).",
-  "A conjunction of parallel planes somehow energizes a lowly peasant to the power of a greater deity — but only until the conjunction ends.",
-  "A crosstime catastrophe has cut off the Material Plane from all others.",
-  "A dragon kills the ruler of the largest nation and takes over, calling itself the Dragon King.",
-  "A flaw in a true resurrection spell leaves one player character undead by night and alive by day.",
-  "A floating city arrives from across the sea, apparently fleeing the depredations of the Warlord, an epic barbarian.",
-  "A flock of chichimecs is ravaging across the continent.",
-  "A Giantmoot is called by a 25th-level storm giant blackguard. Powerful giants from around the world (and other worlds) begin to congregate.",
-  "A glorious gemstone in which the first light of creation still lingers is purportedly languishing in an ancient, crumbling demiplane.",
-  "A great chase ensues through endless parallel dimensions as wizard researchers follow the faint trail of the long-vanished elder elves.",
-  "A group of gargoyle paragons claims the Cathedral of Pelor as its own new home.",
-  "A hero of renown (a quasi-deity, really) is to be wed to an elven prince, but the prince’s royal family claims the prince is under a spell.",
-  "A hole is gouged in the veil separating life and death. As the tide of life pours out into the void, all creatures everywhere begin to die as they accumulate negative levels. The hole must be mended.",
-  "A hecatoncheires and two of its siblings emerge from a red-lit crevice in the earth.",
-  "A lesser deity declares the PCs as its mortal enemies, enjoining all its worshipers and allies to find and slay them.",
-  "A longstanding illusion is pierced, revealing that the king is nowhere to be found, and that all dictates of the kingdom have been actually flowing from the thieves’ guild.",
-  "A new deity decides to leave the Outer Planes to set up its palace on the face of the Material Plane. Once it arrives, it demands worshipers and servitors.",
-  "A phane has determined how to destroy the past (and therefore the present). Unless it can be stopped, time itself will unravel.",
-  "A plague spreads that only affects outsiders. Celestials and fiends alike beg the player characters for help.",
-  "A powerful lich traps the soul of a major deity in a gemstone and uses it to fuel his unholy empire.",
-  "A rift opens into the Far Realm, and its madness begins to warp the minds and bodies of everything nearby.",
-  "A rogue planet drifts into the solar system, carrying an ancient and sleeping god who is beginning to stir.",
-  "A secret cabal of deities decides to unmake the multiverse and start anew.",
-  "A sentient artifact begins recruiting mortals to form a cult dedicated to its ascension.",
-  "A strange comet appears in the night sky — its tail filled with the souls of the damned.",
-  "A sun is dying, and its fading light threatens to extinguish divine magic across a world.",
-  "A tarrasque-like horror of living stone awakens in the underworld, burrowing up toward civilization.",
-  "A thousand-mile storm perpetually circles the equator; within its eye lies a paradise of impossible magic.",
-  "A time-traveling assassin begins killing the ancestors of famous heroes and villains alike.",
-  "A vast ocean suddenly drains into the Underdark, revealing a sunken empire ready to rise again.",
-  "A war erupts between two deities — one of law and one of chaos — and mortals are caught in the middle.",
-  "A wizard-king ascends to godhood and declares that no other mortal shall ever use magic again.",
-  "An angel falls, not to evil but to apathy, and begins unmaking reality out of boredom.",
-  "An army of undead dragons rises to blot out the sun, led by a dracolich demi-god.",
-  "An artifact of pure entropy is uncovered, and every being who touches it ceases to have ever existed.",
-  "An epic portal opens to a mirror multiverse where the PCs are tyrants — and their counterparts invade.",
-  "An immortal lich grows weary of eternity and offers to trade places with a mortal hero.",
-  "An island of gods crashes into the ocean, and the resulting tidal wave threatens half the world.",
-  "An unknown cosmic predator begins devouring stars — and the gods fear to speak of it.",
-  "At the world’s core, something vast begins to awaken and reshape the continents above.",
-  "Entire nations vanish overnight, reappearing in twisted reflections of themselves.",
-  "Every prayer in the world goes unanswered — the gods are gone, and none know why.",
-  "Every time the PCs sleep, another world ends.",
-  "Everywhere the PCs travel, they are heralded as bringers of prophecy — one that predicts the end.",
-  "Fate itself has been slain, and no future is certain.",
-  "Fiends discover how to corrupt positive energy and unleash radiant undead.",
-  "For reasons unknown, the ocean begins boiling.",
-  "From beyond the stars, a vast swarm of void-born creatures devours planets and knowledge alike.",
-  "Ghosts begin to solidify — and the living become intangible.",
-  "Gods begin to die one by one — and mortals start inheriting their portfolios.",
-  "In a forgotten demiplane, the PCs encounter their own future selves warning them of a mistake they’ve yet to make.",
-  "In the depths of the world’s oceans, an ancient vault unlocks and releases something older than time.",
-  "In the highest mountain peak, an imprisoned titan of pure logic awakens to “correct” reality’s chaos.",
-  "Magic itself begins to unravel — spells cast have unpredictable or explosive results.",
-  "Mortal dreams start merging, creating a shared subconscious world that begins to bleed into reality.",
-  "Night lasts a month, and the stars start to move in unnatural patterns.",
-  "On the moon, an empire of constructs declares war on the gods.",
-  "One of the PCs is unknowingly the reincarnation of a slain deity.",
-  "One of the suns in a binary system is revealed to be a sleeping dragon god.",
-  "Planar boundaries dissolve, and creatures from every reality flood into one world.",
-  "Powerful outsiders begin disappearing; rumor claims they are being devoured by the void.",
-  "Reality’s laws start to contradict themselves — gravity pulls upward, fire freezes, and death heals.",
-  "Something ancient beneath the sea begins singing, and its song changes the nature of magic.",
-  "Someone is rewriting history, and the PCs are the only ones who remember the truth.",
-  "The air itself turns to poison as the world begins to reject mortal life.",
-  "The blood of a slain god rains for forty days, granting madness and power to mortals.",
-  "The boundary between dream and waking collapses.",
-  "The city of doors begins closing one portal at a time, threatening to isolate every plane.",
-  "The first vampire god is reborn and begins hunting deities for blood.",
-  "The gods demand judgment for the mortals’ hubris in slaying too many divine beings.",
-  "The greatest wizard of the age turns into living spellfire and consumes the weave itself.",
-  "The heavens shatter — stars fall like meteors and reshape the landscape.",
-  "The PCs find the corpse of the multiverse’s creator — and it’s not quite dead.",
-  "The PCs must journey to the end of time to prevent it from looping endlessly.",
-  "The planes begin to merge, forming strange hybrids of Heaven and Hell.",
-  "The souls of the dead stop passing on and begin reincarnating immediately.",
-  "The sun vanishes — and the world continues to exist somehow.",
-  "The true name of death is discovered — and spoken aloud.",
-  "The underworld freezes, sealing all undead in place — except one.",
-  "The world’s languages begin merging into a single alien tongue that compels obedience.",
-  "The world’s magic begins turning sentient and developing desires of its own.",
-  "Thousands of heroes across the planes vanish, replaced by perfect copies loyal to a hidden god.",
-  "Time fractures, and events begin happening out of order.",
-  "Titans rise again, and gods fall silent.",
-  "Two parallel universes begin to merge — one good, one evil.",
-  "When the PCs awaken one morning, they find that they are the only living mortals left.",
-  "With every death, the world grows smaller.",
-  "Younger gods rise to overthrow the pantheon — and choose the PCs as their heralds."
-];
-
-
-function generateAdventure() {
-  const randomAdventure = pickRandom(adventureIdeasList);
-  const randomAdventureResult = `${randomAdventure}`
-  document.getElementById("adventure_output_box").textContent = randomAdventureResult;
-}
-document.getElementById("random_adventures").addEventListener("click", generateAdventure);
 
 
 
@@ -504,127 +330,127 @@ const monsters = [
   { "name": "Displacer Beast, Pack Lord", "CR": "12", "book": "Monster Manual I", "page": "66" },
   { "name": "Dog", "CR": "1/3", "book": "Monster Manual I", "page": "271" },
   { "name": "Dog, Riding", "CR": "1", "book": "Monster Manual I", "page": "272" },
-  {"name": "Doppelganger", "CR": "3", "book": "Monster Manual I", "page": "67"},
-  {"name": "Dragon, Black", "CR": "5", "book": "Monster Manual I", "page": "70"},
-  {"name": "Dragon, Black", "CR": "8", "book": "Monster Manual I", "page": "70"},
-  {"name": "Dragon, Black", "CR": "11", "book": "Monster Manual I", "page": "70"},
-  {"name": "Dragon, Black", "CR": "14", "book": "Monster Manual I", "page": "70"},
-  {"name": "Dragon, Black", "CR": "17", "book": "Monster Manual I", "page": "70"},
-  {"name": "Dragon, Black", "CR": "20", "book": "Monster Manual I", "page": "70"},
-  {"name": "Dragon, Black", "CR": "23", "book": "Monster Manual I", "page": "70"},
-  {"name": "Dragon, Black", "CR": "26", "book": "Monster Manual I", "page": "70"},
-  {"name": "Dragon, Black", "CR": "29", "book": "Monster Manual I", "page": "70"},
-  {"name": "Dragon, Black", "CR": "32", "book": "Monster Manual I", "page": "70"},
-  {"name": "Dragon, Black", "CR": "35", "book": "Monster Manual I", "page": "70"},
-  {"name": "Dragon, Black", "CR": "38", "book": "Monster Manual I", "page": "70"},
-  {"name": "Dragon, Blue", "CR": "5", "book": "Monster Manual I", "page": "72"},
-  {"name": "Dragon, Blue", "CR": "8", "book": "Monster Manual I", "page": "72"},
-  {"name": "Dragon, Blue", "CR": "11", "book": "Monster Manual I", "page": "72"},
-  {"name": "Dragon, Blue", "CR": "14", "book": "Monster Manual I", "page": "72"},
-  {"name": "Dragon, Blue", "CR": "17", "book": "Monster Manual I", "page": "72"},
-  {"name": "Dragon, Blue", "CR": "20", "book": "Monster Manual I", "page": "72"},
-  {"name": "Dragon, Blue", "CR": "23", "book": "Monster Manual I", "page": "72"},
-  {"name": "Dragon, Blue", "CR": "26", "book": "Monster Manual I", "page": "72"},
-  {"name": "Dragon, Blue", "CR": "29", "book": "Monster Manual I", "page": "72"},
-  {"name": "Dragon, Blue", "CR": "32", "book": "Monster Manual I", "page": "72"},
-  {"name": "Dragon, Blue", "CR": "35", "book": "Monster Manual I", "page": "72"},
-  {"name": "Dragon, Blue", "CR": "38", "book": "Monster Manual I", "page": "72"},
-  {"name": "Dragon, Green", "CR": "5", "book": "Monster Manual I", "page": "74"},
-  {"name": "Dragon, Green", "CR": "8", "book": "Monster Manual I", "page": "74"},
-  {"name": "Dragon, Green", "CR": "11", "book": "Monster Manual I", "page": "74"},
-  {"name": "Dragon, Green", "CR": "14", "book": "Monster Manual I", "page": "74"},
-  {"name": "Dragon, Green", "CR": "17", "book": "Monster Manual I", "page": "74"},
-  {"name": "Dragon, Green", "CR": "20", "book": "Monster Manual I", "page": "74"},
-  {"name": "Dragon, Green", "CR": "23", "book": "Monster Manual I", "page": "74"},
-  {"name": "Dragon, Green", "CR": "26", "book": "Monster Manual I", "page": "74"},
-  {"name": "Dragon, Green", "CR": "29", "book": "Monster Manual I", "page": "74"},
-  {"name": "Dragon, Green", "CR": "32", "book": "Monster Manual I", "page": "74"},
-  {"name": "Dragon, Green", "CR": "35", "book": "Monster Manual I", "page": "74"},
-  {"name": "Dragon, Green", "CR": "38", "book": "Monster Manual I", "page": "74"},
-  {"name": "Dragon, Red", "CR": "5", "book": "Monster Manual I", "page": "75"},
-  {"name": "Dragon, Red", "CR": "8", "book": "Monster Manual I", "page": "75"},
-  {"name": "Dragon, Red", "CR": "11", "book": "Monster Manual I", "page": "75"},
-  {"name": "Dragon, Red", "CR": "14", "book": "Monster Manual I", "page": "75"},
-  {"name": "Dragon, Red", "CR": "17", "book": "Monster Manual I", "page": "75"},
-  {"name": "Dragon, Red", "CR": "20", "book": "Monster Manual I", "page": "75"},
-  {"name": "Dragon, Red", "CR": "23", "book": "Monster Manual I", "page": "75"},
-  {"name": "Dragon, Red", "CR": "26", "book": "Monster Manual I", "page": "75"},
-  {"name": "Dragon, Red", "CR": "29", "book": "Monster Manual I", "page": "75"},
-  {"name": "Dragon, Red", "CR": "32", "book": "Monster Manual I", "page": "75"},
-  {"name": "Dragon, Red", "CR": "35", "book": "Monster Manual I", "page": "75"},
-  {"name": "Dragon, Red", "CR": "38", "book": "Monster Manual I", "page": "75"},
-  {"name": "Dragon, White", "CR": "5", "book": "Monster Manual I", "page": "77"},
-  {"name": "Dragon, White", "CR": "8", "book": "Monster Manual I", "page": "77"},
-  {"name": "Dragon, White", "CR": "11", "book": "Monster Manual I", "page": "77"},
-  {"name": "Dragon, White", "CR": "14", "book": "Monster Manual I", "page": "77"},
-  {"name": "Dragon, White", "CR": "17", "book": "Monster Manual I", "page": "77"},
-  {"name": "Dragon, White", "CR": "20", "book": "Monster Manual I", "page": "77"},
-  {"name": "Dragon, White", "CR": "23", "book": "Monster Manual I", "page": "77"},
-  {"name": "Dragon, White", "CR": "26", "book": "Monster Manual I", "page": "77"},
-  {"name": "Dragon, White", "CR": "29", "book": "Monster Manual I", "page": "77"},
-  {"name": "Dragon, White", "CR": "32", "book": "Monster Manual I", "page": "77"},
-  {"name": "Dragon, White", "CR": "35", "book": "Monster Manual I", "page": "77"},
-  {"name": "Dragon, White", "CR": "38", "book": "Monster Manual I", "page": "77"},
-  {"name": "Dragon, Brass", "CR": "5", "book": "Monster Manual I", "page": "79"},
-  {"name": "Dragon, Brass", "CR": "8", "book": "Monster Manual I", "page": "79"},
-  {"name": "Dragon, Brass", "CR": "11", "book": "Monster Manual I", "page": "79"},
-  {"name": "Dragon, Brass", "CR": "14", "book": "Monster Manual I", "page": "79"},
-  {"name": "Dragon, Brass", "CR": "17", "book": "Monster Manual I", "page": "79"},
-  {"name": "Dragon, Brass", "CR": "20", "book": "Monster Manual I", "page": "79"},
-  {"name": "Dragon, Brass", "CR": "23", "book": "Monster Manual I", "page": "79"},
-  {"name": "Dragon, Brass", "CR": "26", "book": "Monster Manual I", "page": "79"},
-  {"name": "Dragon, Brass", "CR": "29", "book": "Monster Manual I", "page": "79"},
-  {"name": "Dragon, Brass", "CR": "32", "book": "Monster Manual I", "page": "79"},
-  {"name": "Dragon, Brass", "CR": "35", "book": "Monster Manual I", "page": "79"},
-  {"name": "Dragon, Brass", "CR": "38", "book": "Monster Manual I", "page": "79"},
-  {"name": "Dragon, Bronze", "CR": "5", "book": "Monster Manual I", "page": "80"},
-  {"name": "Dragon, Bronze", "CR": "8", "book": "Monster Manual I", "page": "80"},
-  {"name": "Dragon, Bronze", "CR": "11", "book": "Monster Manual I", "page": "80"},
-  {"name": "Dragon, Bronze", "CR": "14", "book": "Monster Manual I", "page": "80"},
-  {"name": "Dragon, Bronze", "CR": "17", "book": "Monster Manual I", "page": "80"},
-  {"name": "Dragon, Bronze", "CR": "20", "book": "Monster Manual I", "page": "80"},
-  {"name": "Dragon, Bronze", "CR": "23", "book": "Monster Manual I", "page": "80"},
-  {"name": "Dragon, Bronze", "CR": "26", "book": "Monster Manual I", "page": "80"},
-  {"name": "Dragon, Bronze", "CR": "29", "book": "Monster Manual I", "page": "80"},
-  {"name": "Dragon, Bronze", "CR": "32", "book": "Monster Manual I", "page": "80"},
-  {"name": "Dragon, Bronze", "CR": "35", "book": "Monster Manual I", "page": "80"},
-  {"name": "Dragon, Bronze", "CR": "38", "book": "Monster Manual I", "page": "80"},
-  {"name": "Dragon, Copper", "CR": "5", "book": "Monster Manual I", "page": "82"},
-  {"name": "Dragon, Copper", "CR": "8", "book": "Monster Manual I", "page": "82"},
-  {"name": "Dragon, Copper", "CR": "11", "book": "Monster Manual I", "page": "82"},
-  {"name": "Dragon, Copper", "CR": "14", "book": "Monster Manual I", "page": "82"},
-  {"name": "Dragon, Copper", "CR": "17", "book": "Monster Manual I", "page": "82"},
-  {"name": "Dragon, Copper", "CR": "20", "book": "Monster Manual I", "page": "82"},
-  {"name": "Dragon, Copper", "CR": "23", "book": "Monster Manual I", "page": "82"},
-  {"name": "Dragon, Copper", "CR": "26", "book": "Monster Manual I", "page": "82"},
-  {"name": "Dragon, Copper", "CR": "29", "book": "Monster Manual I", "page": "82"},
-  {"name": "Dragon, Copper", "CR": "32", "book": "Monster Manual I", "page": "82"},
-  {"name": "Dragon, Copper", "CR": "35", "book": "Monster Manual I", "page": "82"},
-  {"name": "Dragon, Copper", "CR": "38", "book": "Monster Manual I", "page": "82"},
-  {"name": "Dragon, Gold", "CR": "5", "book": "Monster Manual I", "page": "84"},
-  {"name": "Dragon, Gold", "CR": "8", "book": "Monster Manual I", "page": "84"},
-  {"name": "Dragon, Gold", "CR": "11", "book": "Monster Manual I", "page": "84"},
-  {"name": "Dragon, Gold", "CR": "14", "book": "Monster Manual I", "page": "84"},
-  {"name": "Dragon, Gold", "CR": "17", "book": "Monster Manual I", "page": "84"},
-  {"name": "Dragon, Gold", "CR": "20", "book": "Monster Manual I", "page": "84"},
-  {"name": "Dragon, Gold", "CR": "23", "book": "Monster Manual I", "page": "84"},
-  {"name": "Dragon, Gold", "CR": "26", "book": "Monster Manual I", "page": "84"},
-  {"name": "Dragon, Gold", "CR": "29", "book": "Monster Manual I", "page": "84"},
-  {"name": "Dragon, Gold", "CR": "32", "book": "Monster Manual I", "page": "84"},
-  {"name": "Dragon, Gold", "CR": "35", "book": "Monster Manual I", "page": "84"},
-  {"name": "Dragon, Gold", "CR": "38", "book": "Monster Manual I", "page": "84"},
-  {"name": "Dragon, Silver", "CR": "5", "book": "Monster Manual I", "page": "86"},
-  {"name": "Dragon, Silver", "CR": "8", "book": "Monster Manual I", "page": "86"},
-  {"name": "Dragon, Silver", "CR": "11", "book": "Monster Manual I", "page": "86"},
-  {"name": "Dragon, Silver", "CR": "14", "book": "Monster Manual I", "page": "86"},
-  {"name": "Dragon, Silver", "CR": "17", "book": "Monster Manual I", "page": "86"},
-  {"name": "Dragon, Silver", "CR": "20", "book": "Monster Manual I", "page": "86"},
-  {"name": "Dragon, Silver", "CR": "23", "book": "Monster Manual I", "page": "86"},
-  {"name": "Dragon, Silver", "CR": "26", "book": "Monster Manual I", "page": "86"},
-  {"name": "Dragon, Silver", "CR": "29", "book": "Monster Manual I", "page": "86"},
-  {"name": "Dragon, Silver", "CR": "32", "book": "Monster Manual I", "page": "86"},
-  {"name": "Dragon, Silver", "CR": "35", "book": "Monster Manual I", "page": "86"},
-  {"name": "Dragon, Silver", "CR": "38", "book": "Monster Manual I", "page": "86"},
+  { "name": "Doppelganger", "CR": "3", "book": "Monster Manual I", "page": "67" },
+  { "name": "Dragon, Black", "CR": "5", "book": "Monster Manual I", "page": "70" },
+  { "name": "Dragon, Black", "CR": "8", "book": "Monster Manual I", "page": "70" },
+  { "name": "Dragon, Black", "CR": "11", "book": "Monster Manual I", "page": "70" },
+  { "name": "Dragon, Black", "CR": "14", "book": "Monster Manual I", "page": "70" },
+  { "name": "Dragon, Black", "CR": "17", "book": "Monster Manual I", "page": "70" },
+  { "name": "Dragon, Black", "CR": "20", "book": "Monster Manual I", "page": "70" },
+  { "name": "Dragon, Black", "CR": "23", "book": "Monster Manual I", "page": "70" },
+  { "name": "Dragon, Black", "CR": "26", "book": "Monster Manual I", "page": "70" },
+  { "name": "Dragon, Black", "CR": "29", "book": "Monster Manual I", "page": "70" },
+  { "name": "Dragon, Black", "CR": "32", "book": "Monster Manual I", "page": "70" },
+  { "name": "Dragon, Black", "CR": "35", "book": "Monster Manual I", "page": "70" },
+  { "name": "Dragon, Black", "CR": "38", "book": "Monster Manual I", "page": "70" },
+  { "name": "Dragon, Blue", "CR": "5", "book": "Monster Manual I", "page": "72" },
+  { "name": "Dragon, Blue", "CR": "8", "book": "Monster Manual I", "page": "72" },
+  { "name": "Dragon, Blue", "CR": "11", "book": "Monster Manual I", "page": "72" },
+  { "name": "Dragon, Blue", "CR": "14", "book": "Monster Manual I", "page": "72" },
+  { "name": "Dragon, Blue", "CR": "17", "book": "Monster Manual I", "page": "72" },
+  { "name": "Dragon, Blue", "CR": "20", "book": "Monster Manual I", "page": "72" },
+  { "name": "Dragon, Blue", "CR": "23", "book": "Monster Manual I", "page": "72" },
+  { "name": "Dragon, Blue", "CR": "26", "book": "Monster Manual I", "page": "72" },
+  { "name": "Dragon, Blue", "CR": "29", "book": "Monster Manual I", "page": "72" },
+  { "name": "Dragon, Blue", "CR": "32", "book": "Monster Manual I", "page": "72" },
+  { "name": "Dragon, Blue", "CR": "35", "book": "Monster Manual I", "page": "72" },
+  { "name": "Dragon, Blue", "CR": "38", "book": "Monster Manual I", "page": "72" },
+  { "name": "Dragon, Green", "CR": "5", "book": "Monster Manual I", "page": "74" },
+  { "name": "Dragon, Green", "CR": "8", "book": "Monster Manual I", "page": "74" },
+  { "name": "Dragon, Green", "CR": "11", "book": "Monster Manual I", "page": "74" },
+  { "name": "Dragon, Green", "CR": "14", "book": "Monster Manual I", "page": "74" },
+  { "name": "Dragon, Green", "CR": "17", "book": "Monster Manual I", "page": "74" },
+  { "name": "Dragon, Green", "CR": "20", "book": "Monster Manual I", "page": "74" },
+  { "name": "Dragon, Green", "CR": "23", "book": "Monster Manual I", "page": "74" },
+  { "name": "Dragon, Green", "CR": "26", "book": "Monster Manual I", "page": "74" },
+  { "name": "Dragon, Green", "CR": "29", "book": "Monster Manual I", "page": "74" },
+  { "name": "Dragon, Green", "CR": "32", "book": "Monster Manual I", "page": "74" },
+  { "name": "Dragon, Green", "CR": "35", "book": "Monster Manual I", "page": "74" },
+  { "name": "Dragon, Green", "CR": "38", "book": "Monster Manual I", "page": "74" },
+  { "name": "Dragon, Red", "CR": "5", "book": "Monster Manual I", "page": "75" },
+  { "name": "Dragon, Red", "CR": "8", "book": "Monster Manual I", "page": "75" },
+  { "name": "Dragon, Red", "CR": "11", "book": "Monster Manual I", "page": "75" },
+  { "name": "Dragon, Red", "CR": "14", "book": "Monster Manual I", "page": "75" },
+  { "name": "Dragon, Red", "CR": "17", "book": "Monster Manual I", "page": "75" },
+  { "name": "Dragon, Red", "CR": "20", "book": "Monster Manual I", "page": "75" },
+  { "name": "Dragon, Red", "CR": "23", "book": "Monster Manual I", "page": "75" },
+  { "name": "Dragon, Red", "CR": "26", "book": "Monster Manual I", "page": "75" },
+  { "name": "Dragon, Red", "CR": "29", "book": "Monster Manual I", "page": "75" },
+  { "name": "Dragon, Red", "CR": "32", "book": "Monster Manual I", "page": "75" },
+  { "name": "Dragon, Red", "CR": "35", "book": "Monster Manual I", "page": "75" },
+  { "name": "Dragon, Red", "CR": "38", "book": "Monster Manual I", "page": "75" },
+  { "name": "Dragon, White", "CR": "5", "book": "Monster Manual I", "page": "77" },
+  { "name": "Dragon, White", "CR": "8", "book": "Monster Manual I", "page": "77" },
+  { "name": "Dragon, White", "CR": "11", "book": "Monster Manual I", "page": "77" },
+  { "name": "Dragon, White", "CR": "14", "book": "Monster Manual I", "page": "77" },
+  { "name": "Dragon, White", "CR": "17", "book": "Monster Manual I", "page": "77" },
+  { "name": "Dragon, White", "CR": "20", "book": "Monster Manual I", "page": "77" },
+  { "name": "Dragon, White", "CR": "23", "book": "Monster Manual I", "page": "77" },
+  { "name": "Dragon, White", "CR": "26", "book": "Monster Manual I", "page": "77" },
+  { "name": "Dragon, White", "CR": "29", "book": "Monster Manual I", "page": "77" },
+  { "name": "Dragon, White", "CR": "32", "book": "Monster Manual I", "page": "77" },
+  { "name": "Dragon, White", "CR": "35", "book": "Monster Manual I", "page": "77" },
+  { "name": "Dragon, White", "CR": "38", "book": "Monster Manual I", "page": "77" },
+  { "name": "Dragon, Brass", "CR": "5", "book": "Monster Manual I", "page": "79" },
+  { "name": "Dragon, Brass", "CR": "8", "book": "Monster Manual I", "page": "79" },
+  { "name": "Dragon, Brass", "CR": "11", "book": "Monster Manual I", "page": "79" },
+  { "name": "Dragon, Brass", "CR": "14", "book": "Monster Manual I", "page": "79" },
+  { "name": "Dragon, Brass", "CR": "17", "book": "Monster Manual I", "page": "79" },
+  { "name": "Dragon, Brass", "CR": "20", "book": "Monster Manual I", "page": "79" },
+  { "name": "Dragon, Brass", "CR": "23", "book": "Monster Manual I", "page": "79" },
+  { "name": "Dragon, Brass", "CR": "26", "book": "Monster Manual I", "page": "79" },
+  { "name": "Dragon, Brass", "CR": "29", "book": "Monster Manual I", "page": "79" },
+  { "name": "Dragon, Brass", "CR": "32", "book": "Monster Manual I", "page": "79" },
+  { "name": "Dragon, Brass", "CR": "35", "book": "Monster Manual I", "page": "79" },
+  { "name": "Dragon, Brass", "CR": "38", "book": "Monster Manual I", "page": "79" },
+  { "name": "Dragon, Bronze", "CR": "5", "book": "Monster Manual I", "page": "80" },
+  { "name": "Dragon, Bronze", "CR": "8", "book": "Monster Manual I", "page": "80" },
+  { "name": "Dragon, Bronze", "CR": "11", "book": "Monster Manual I", "page": "80" },
+  { "name": "Dragon, Bronze", "CR": "14", "book": "Monster Manual I", "page": "80" },
+  { "name": "Dragon, Bronze", "CR": "17", "book": "Monster Manual I", "page": "80" },
+  { "name": "Dragon, Bronze", "CR": "20", "book": "Monster Manual I", "page": "80" },
+  { "name": "Dragon, Bronze", "CR": "23", "book": "Monster Manual I", "page": "80" },
+  { "name": "Dragon, Bronze", "CR": "26", "book": "Monster Manual I", "page": "80" },
+  { "name": "Dragon, Bronze", "CR": "29", "book": "Monster Manual I", "page": "80" },
+  { "name": "Dragon, Bronze", "CR": "32", "book": "Monster Manual I", "page": "80" },
+  { "name": "Dragon, Bronze", "CR": "35", "book": "Monster Manual I", "page": "80" },
+  { "name": "Dragon, Bronze", "CR": "38", "book": "Monster Manual I", "page": "80" },
+  { "name": "Dragon, Copper", "CR": "5", "book": "Monster Manual I", "page": "82" },
+  { "name": "Dragon, Copper", "CR": "8", "book": "Monster Manual I", "page": "82" },
+  { "name": "Dragon, Copper", "CR": "11", "book": "Monster Manual I", "page": "82" },
+  { "name": "Dragon, Copper", "CR": "14", "book": "Monster Manual I", "page": "82" },
+  { "name": "Dragon, Copper", "CR": "17", "book": "Monster Manual I", "page": "82" },
+  { "name": "Dragon, Copper", "CR": "20", "book": "Monster Manual I", "page": "82" },
+  { "name": "Dragon, Copper", "CR": "23", "book": "Monster Manual I", "page": "82" },
+  { "name": "Dragon, Copper", "CR": "26", "book": "Monster Manual I", "page": "82" },
+  { "name": "Dragon, Copper", "CR": "29", "book": "Monster Manual I", "page": "82" },
+  { "name": "Dragon, Copper", "CR": "32", "book": "Monster Manual I", "page": "82" },
+  { "name": "Dragon, Copper", "CR": "35", "book": "Monster Manual I", "page": "82" },
+  { "name": "Dragon, Copper", "CR": "38", "book": "Monster Manual I", "page": "82" },
+  { "name": "Dragon, Gold", "CR": "5", "book": "Monster Manual I", "page": "84" },
+  { "name": "Dragon, Gold", "CR": "8", "book": "Monster Manual I", "page": "84" },
+  { "name": "Dragon, Gold", "CR": "11", "book": "Monster Manual I", "page": "84" },
+  { "name": "Dragon, Gold", "CR": "14", "book": "Monster Manual I", "page": "84" },
+  { "name": "Dragon, Gold", "CR": "17", "book": "Monster Manual I", "page": "84" },
+  { "name": "Dragon, Gold", "CR": "20", "book": "Monster Manual I", "page": "84" },
+  { "name": "Dragon, Gold", "CR": "23", "book": "Monster Manual I", "page": "84" },
+  { "name": "Dragon, Gold", "CR": "26", "book": "Monster Manual I", "page": "84" },
+  { "name": "Dragon, Gold", "CR": "29", "book": "Monster Manual I", "page": "84" },
+  { "name": "Dragon, Gold", "CR": "32", "book": "Monster Manual I", "page": "84" },
+  { "name": "Dragon, Gold", "CR": "35", "book": "Monster Manual I", "page": "84" },
+  { "name": "Dragon, Gold", "CR": "38", "book": "Monster Manual I", "page": "84" },
+  { "name": "Dragon, Silver", "CR": "5", "book": "Monster Manual I", "page": "86" },
+  { "name": "Dragon, Silver", "CR": "8", "book": "Monster Manual I", "page": "86" },
+  { "name": "Dragon, Silver", "CR": "11", "book": "Monster Manual I", "page": "86" },
+  { "name": "Dragon, Silver", "CR": "14", "book": "Monster Manual I", "page": "86" },
+  { "name": "Dragon, Silver", "CR": "17", "book": "Monster Manual I", "page": "86" },
+  { "name": "Dragon, Silver", "CR": "20", "book": "Monster Manual I", "page": "86" },
+  { "name": "Dragon, Silver", "CR": "23", "book": "Monster Manual I", "page": "86" },
+  { "name": "Dragon, Silver", "CR": "26", "book": "Monster Manual I", "page": "86" },
+  { "name": "Dragon, Silver", "CR": "29", "book": "Monster Manual I", "page": "86" },
+  { "name": "Dragon, Silver", "CR": "32", "book": "Monster Manual I", "page": "86" },
+  { "name": "Dragon, Silver", "CR": "35", "book": "Monster Manual I", "page": "86" },
+  { "name": "Dragon, Silver", "CR": "38", "book": "Monster Manual I", "page": "86" },
   { "name": "Dragon Turtle", "CR": "9", "book": "Monster Manual I", "page": "88" },
   { "name": "Dragonne", "CR": "7", "book": "Monster Manual I", "page": "89" },
   { "name": "Drider", "CR": "7", "book": "Monster Manual I", "page": "89" },
@@ -632,8 +458,8 @@ const monsters = [
   { "name": "Dwarf", "CR": "1/2", "book": "Monster Manual I", "page": "91" },
   { "name": "Eagle", "CR": "1/2", "book": "Monster Manual I", "page": "272" },
   { "name": "Eagle, Giant", "CR": "3", "book": "Monster Manual I", "page": "93" },
-  { "name": "Eladrin, Bralani", "CR": "6", "book": "Monster Manual I", "page": "93"},
-  { "name": "Eladrin, Ghaele", "CR": "13", "book": "Monster Manual I", "page": "94"},
+  { "name": "Eladrin, Bralani", "CR": "6", "book": "Monster Manual I", "page": "93" },
+  { "name": "Eladrin, Ghaele", "CR": "13", "book": "Monster Manual I", "page": "94" },
   { "name": "Elemental-Air, Small", "CR": "1", "book": "Monster Manual I", "page": "95" },
   { "name": "Elemental-Air, Medium", "CR": "3", "book": "Monster Manual I", "page": "95" },
   { "name": "Elemental-Air, Large", "CR": "5", "book": "Monster Manual I", "page": "95" },
@@ -658,7 +484,7 @@ const monsters = [
   { "name": "Elemental-Water, Huge", "CR": "7", "book": "Monster Manual I", "page": "98" },
   { "name": "Elemental-Water, Greater", "CR": "9", "book": "Monster Manual I", "page": "98" },
   { "name": "Elemental-Water, Elder", "CR": "11", "book": "Monster Manual I", "page": "98" },
-  { "name": "Elf", "CR": "1/2", "book": "Monster Manual I", "page": "101"},
+  { "name": "Elf", "CR": "1/2", "book": "Monster Manual I", "page": "101" },
   //---------------------YOU ARE HERE----------------------
   { "name": "Elephant", "CR": "7", "book": "Monster Manual I", "page": "74" },
   { "name": "Elves", "CR": "1/2", "book": "Monster Manual I", "page": "74" },
@@ -1240,26 +1066,310 @@ const monsters = [
 
 
 //Monster Generator
-const generateMonsterButton = document.getElementById("generateMonsterButton");
-const crSelect = document.getElementById("crSelect");
 
-generateMonsterButton.addEventListener("click", () => {
-  const selectedCR = crSelect.value;
-  const filtered = monsters.filter(c => c.CR === selectedCR);
+document.addEventListener("DOMContentLoaded", () => {
+  const generateMonsterButton = document.getElementById("generateMonsterButton");
+  const crSelect = document.getElementById("crSelect");
 
-  if (filtered.length === 0) {
-    generateMonsterButton.textContent = `No creatures found for CR ${selectedCR}`;
-    return;
-  }
+  if (!generateMonsterButton || !crSelect) return;
 
-  const randomCreature = filtered[Math.floor(Math.random() * filtered.length)];
-  generateMonsterButton.textContent = `${randomCreature.name} - ${randomCreature.book} - page ${randomCreature.page}`;
+  generateMonsterButton.addEventListener("click", () => {
+    const selectedCR = crSelect.value;
+
+    if (typeof monsters === "undefined") {
+      console.error("Monsters list not loaded yet!");
+      generateMonsterButton.textContent = "Error: monsters not loaded.";
+      return;
+    }
+
+    const filtered = monsters.filter(m => m.CR === selectedCR);
+
+    if (filtered.length === 0) {
+      generateMonsterButton.textContent = `No creatures found for CR ${selectedCR}`;
+      return;
+    }
+
+    const randomCreature = filtered[Math.floor(Math.random() * filtered.length)];
+    generateMonsterButton.textContent =
+      `${randomCreature.name} (CR ${randomCreature.CR})\n${randomCreature.book}, page ${randomCreature.page}`;
+  });
+
+  crSelect.addEventListener("change", () => {
+    generateMonsterButton.textContent = "Click here to generate a monster!";
+  });
 });
 
 
 
 
 
+
+
+
+// for the random adventures
+document.addEventListener("DOMContentLoaded", () => {
+  const adventureIdeasList = [
+    "Abandon village is haunted by a restless spirit.",
+    "Abductions in the city lead to a cult.",
+    "Adventurers must retrieve a stolen artifact.",
+    "Ancient evil awakens beneath the town.",
+    "Assassins target a noble; PCs must protect him.",
+    "Bandits threaten trade routes.",
+    "Baron has gone mad; stop his tyranny.",
+    "Beast terrorizes countryside.",
+    "Break a siege laid on a friendly city.",
+    "Bridge collapse isolates a region.",
+    "Build an outpost in monster-infested territory.",
+    "Capture a notorious criminal.",
+    "City is overrun by vermin—unnatural cause suspected.",
+    "Clerics lose powers; find the reason.",
+    "Compete in a grand tournament.",
+    "Convince a dragon to aid a kingdom.",
+    "Cult attempts to summon a demon.",
+    "Curse afflicts a town; discover the source.",
+    "Darkness falls permanently on a region.",
+    "Defend a caravan from attacks.",
+    "Defend town from invading orcs.",
+    "Demons run rampant in the wilderness.",
+    "Destroy a vampire lord.",
+    "Diplomatic mission to hostile territory.",
+    "Discover source of poisoned well.",
+    "Disgraced noble seeks redemption.",
+    "Dragon demands tribute; deal with it.",
+    "Escort an important NPC.",
+    "Evacuate a village from natural disaster.",
+    "Evil artifact must be destroyed.",
+    "Expose a traitor in the king’s court.",
+    "Face trial for crimes you didn’t commit.",
+    "Find a lost explorer.",
+    "Find the cure for a strange disease.",
+    "Find the heir to a fallen house.",
+    "Fire ravages the countryside—arson suspected.",
+    "Follow map to legendary treasure.",
+    "Forbidden magic causes unnatural effects.",
+    "Free slaves from underground mines.",
+    "Fugitive hides in monster-infested forest.",
+    "Giant sea creature attacks ships.",
+    "Goblin uprising threatens region.",
+    "Haunted mansion holds family secrets.",
+    "Help a ghost find peace.",
+    "Hostage situation in a fortress.",
+    "Hunt the beast that killed a prince.",
+    "Important message must reach city fast.",
+    "Investigate mysterious disappearances.",
+    "Jewel heist points to insider job.",
+    "King cursed by a mysterious figure.",
+    "Liberate a temple from evil control.",
+    "Lost city found in the jungle.",
+    "Magical mishap alters reality.",
+    "Marauders raid coastal villages.",
+    "Merchant’s goods are cursed.",
+    "Messenger never arrived—find out why.",
+    "Mine collapses—workers trapped inside.",
+    "Missing children linked to fairy ring.",
+    "Monster terrorizes local farmlands.",
+    "Mysterious island appears off the coast.",
+    "Necromancer raises ancient army.",
+    "Noble's son joins evil cult.",
+    "Old prophecy foretells coming doom.",
+    "Oracle sends players on cryptic quest.",
+    "Outbreak of lycanthropy in city.",
+    "PCs framed for theft of artifact.",
+    "Pirates block important shipping lane.",
+    "Plague decimates city—find the cause.",
+    "Players inherit a haunted castle.",
+    "Poisoned crops spark famine.",
+    "Political unrest leads to civil war.",
+    "Powerful relic causes weather havoc.",
+    "Prevent assassination of a ruler.",
+    "Protect village during eclipse ritual.",
+    "Rare creature is dying out—protect it.",
+    "Rebel faction rises in remote area.",
+    "Recover a stolen spellbook.",
+    "Rescue a kidnapped noble.",
+    "Retrieve relic from cursed tomb.",
+    "Rival adventurers sabotage your mission.",
+    "Sacred spring dries up mysteriously.",
+    "Save an ancient tree spirit.",
+    "Scrying shows a looming disaster.",
+    "Sealed crypt starts leaking undead.",
+    "Secrets in dreams must be uncovered.",
+    "Seer’s death leads to cursed town.",
+    "Shipwreck survivors tell strange tales.",
+    "Solve a murder mystery.",
+    "Spirits of the past cry for justice.",
+    "Stop a rampaging elemental from destroying a village.",
+    "Stop volcano from erupting magically.",
+    "Storm spirits demand tribute.",
+    "Strange portal appears in wilderness.",
+    "Strangers arrive bearing dark tidings.",
+    "Take over command in losing battle.",
+    "Temple vanishes overnight.",
+    "Thieves’ guild war spills into streets.",
+    "Town celebrates eerie festival.",
+    "Train a militia to resist attack.",
+    "Travel to other plane to fix problem.",
+    "Trolls block crucial mountain pass.",
+    "Uncover ancient truth hidden in ruins.",
+    "Undead rise during full moon.",
+    "Village cursed to forget each day.",
+    "Warlord builds fortress—attack imminent.",
+    "Warriors return as ghostly avengers.",
+    "Weird dreams reveal ancient threat.",
+    "Wild magic zone expands dangerously.",
+    "Wizard tower erupts with chaos.",
+    "A 31st-level balor sorcerer imprisons old friends of the player characters, holding them hostage in return for a service.",
+    "A band of epic death slaadi rogues and sorcerers begins to waylay all planar travelers who chance through their recently claimed turf on the Astral Plane.",
+    "A ranger hero recognized around the world begins to organize a group of explorers for reasons unknown.",
+    "A bard college develops a style of music that charms and dominates any that listen to it too long.",
+    "A beholder cluster made up of paragon beholders begins to war with lesser beholder communities, apparently all seeking a beholder artifact.",
+    "A prominent deity sickens and will die if the cause of its divine malady is not discovered.",
+    "A beloved prophecy long accepted as true fails to occur because of the characters’ meddling, and the world turns against them.",
+    "A blinding, yellow haze seeps down from the sky, covering the world.",
+    "A celestial tree hundreds of miles long reaches its roots down and begins to grow on the world’s surface; creatures from other worlds live in the heights of the tree.",
+    "A child is born who prophecy indicates will one day ascend to godhood.",
+    "A circle of brown blights the forest, killing all vegetation as it continues to expand without limit at an ever-accelerating rate.",
+    "A clan of psionic militants breaks away from the kingdom — literally. A huge chunk of land hundreds of acres wide floats up and away (taking with it many terrified nonpsionic people).",
+    "A conjunction of parallel planes somehow energizes a lowly peasant to the power of a greater deity — but only until the conjunction ends.",
+    "A crosstime catastrophe has cut off the Material Plane from all others.",
+    "A dragon kills the ruler of the largest nation and takes over, calling itself the Dragon King.",
+    "A flaw in a true resurrection spell leaves one player character undead by night and alive by day.",
+    "A floating city arrives from across the sea, apparently fleeing the depredations of the Warlord, an epic barbarian.",
+    "A flock of chichimecs is ravaging across the continent.",
+    "A Giantmoot is called by a 25th-level storm giant blackguard. Powerful giants from around the world (and other worlds) begin to congregate.",
+    "A glorious gemstone in which the first light of creation still lingers is purportedly languishing in an ancient, crumbling demiplane.",
+    "A great chase ensues through endless parallel dimensions as wizard researchers follow the faint trail of the long-vanished elder elves.",
+    "A group of gargoyle paragons claims the Cathedral of Pelor as its own new home.",
+    "A hero of renown (a quasi-deity, really) is to be wed to an elven prince, but the prince’s royal family claims the prince is under a spell.",
+    "A hole is gouged in the veil separating life and death. As the tide of life pours out into the void, all creatures everywhere begin to die as they accumulate negative levels. The hole must be mended.",
+    "A hecatoncheires and two of its siblings emerge from a red-lit crevice in the earth.",
+    "A lesser deity declares the PCs as its mortal enemies, enjoining all its worshipers and allies to find and slay them.",
+    "A longstanding illusion is pierced, revealing that the king is nowhere to be found, and that all dictates of the kingdom have been actually flowing from the thieves’ guild.",
+    "A new deity decides to leave the Outer Planes to set up its palace on the face of the Material Plane. Once it arrives, it demands worshipers and servitors.",
+    "A phane has determined how to destroy the past (and therefore the present). Unless it can be stopped, time itself will unravel.",
+    "A plague spreads that only affects outsiders. Celestials and fiends alike beg the player characters for help.",
+    "A powerful lich traps the soul of a major deity in a gemstone and uses it to fuel his unholy empire.",
+    "A rift opens into the Far Realm, and its madness begins to warp the minds and bodies of everything nearby.",
+    "A rogue planet drifts into the solar system, carrying an ancient and sleeping god who is beginning to stir.",
+    "A secret cabal of deities decides to unmake the multiverse and start anew.",
+    "A sentient artifact begins recruiting mortals to form a cult dedicated to its ascension.",
+    "A strange comet appears in the night sky — its tail filled with the souls of the damned.",
+    "A sun is dying, and its fading light threatens to extinguish divine magic across a world.",
+    "A tarrasque-like horror of living stone awakens in the underworld, burrowing up toward civilization.",
+    "A thousand-mile storm perpetually circles the equator; within its eye lies a paradise of impossible magic.",
+    "A time-traveling assassin begins killing the ancestors of famous heroes and villains alike.",
+    "A vast ocean suddenly drains into the Underdark, revealing a sunken empire ready to rise again.",
+    "A war erupts between two deities — one of law and one of chaos — and mortals are caught in the middle.",
+    "A wizard-king ascends to godhood and declares that no other mortal shall ever use magic again.",
+    "An angel falls, not to evil but to apathy, and begins unmaking reality out of boredom.",
+    "An army of undead dragons rises to blot out the sun, led by a dracolich demi-god.",
+    "An artifact of pure entropy is uncovered, and every being who touches it ceases to have ever existed.",
+    "An epic portal opens to a mirror multiverse where the PCs are tyrants — and their counterparts invade.",
+    "An immortal lich grows weary of eternity and offers to trade places with a mortal hero.",
+    "An island of gods crashes into the ocean, and the resulting tidal wave threatens half the world.",
+    "An unknown cosmic predator begins devouring stars — and the gods fear to speak of it.",
+    "At the world’s core, something vast begins to awaken and reshape the continents above.",
+    "Entire nations vanish overnight, reappearing in twisted reflections of themselves.",
+    "Every prayer in the world goes unanswered — the gods are gone, and none know why.",
+    "Every time the PCs sleep, another world ends.",
+    "Everywhere the PCs travel, they are heralded as bringers of prophecy — one that predicts the end.",
+    "Fate itself has been slain, and no future is certain.",
+    "Fiends discover how to corrupt positive energy and unleash radiant undead.",
+    "For reasons unknown, the ocean begins boiling.",
+    "From beyond the stars, a vast swarm of void-born creatures devours planets and knowledge alike.",
+    "Ghosts begin to solidify — and the living become intangible.",
+    "Gods begin to die one by one — and mortals start inheriting their portfolios.",
+    "In a forgotten demiplane, the PCs encounter their own future selves warning them of a mistake they’ve yet to make.",
+    "In the depths of the world’s oceans, an ancient vault unlocks and releases something older than time.",
+    "In the highest mountain peak, an imprisoned titan of pure logic awakens to “correct” reality’s chaos.",
+    "Magic itself begins to unravel — spells cast have unpredictable or explosive results.",
+    "Mortal dreams start merging, creating a shared subconscious world that begins to bleed into reality.",
+    "Night lasts a month, and the stars start to move in unnatural patterns.",
+    "On the moon, an empire of constructs declares war on the gods.",
+    "One of the PCs is unknowingly the reincarnation of a slain deity.",
+    "One of the suns in a binary system is revealed to be a sleeping dragon god.",
+    "Planar boundaries dissolve, and creatures from every reality flood into one world.",
+    "Powerful outsiders begin disappearing; rumor claims they are being devoured by the void.",
+    "Reality’s laws start to contradict themselves — gravity pulls upward, fire freezes, and death heals.",
+    "Something ancient beneath the sea begins singing, and its song changes the nature of magic.",
+    "Someone is rewriting history, and the PCs are the only ones who remember the truth.",
+    "The air itself turns to poison as the world begins to reject mortal life.",
+    "The blood of a slain god rains for forty days, granting madness and power to mortals.",
+    "The boundary between dream and waking collapses.",
+    "The city of doors begins closing one portal at a time, threatening to isolate every plane.",
+    "The first vampire god is reborn and begins hunting deities for blood.",
+    "The gods demand judgment for the mortals’ hubris in slaying too many divine beings.",
+    "The greatest wizard of the age turns into living spellfire and consumes the weave itself.",
+    "The heavens shatter — stars fall like meteors and reshape the landscape.",
+    "The PCs find the corpse of the multiverse’s creator — and it’s not quite dead.",
+    "The PCs must journey to the end of time to prevent it from looping endlessly.",
+    "The planes begin to merge, forming strange hybrids of Heaven and Hell.",
+    "The souls of the dead stop passing on and begin reincarnating immediately.",
+    "The sun vanishes — and the world continues to exist somehow.",
+    "The true name of death is discovered — and spoken aloud.",
+    "The underworld freezes, sealing all undead in place — except one.",
+    "The world’s languages begin merging into a single alien tongue that compels obedience.",
+    "The world’s magic begins turning sentient and developing desires of its own.",
+    "Thousands of heroes across the planes vanish, replaced by perfect copies loyal to a hidden god.",
+    "Time fractures, and events begin happening out of order.",
+    "Titans rise again, and gods fall silent.",
+    "Two parallel universes begin to merge — one good, one evil.",
+    "When the PCs awaken one morning, they find that they are the only living mortals left.",
+    "With every death, the world grows smaller.",
+    "Younger gods rise to overthrow the pantheon — and choose the PCs as their heralds."
+  ];
+
+
+  function pickRandom(arr) {
+    return arr[Math.floor(Math.random() * arr.length)];
+  }
+
+  const adventureButton = document.getElementById("adventureButton");
+  if (adventureButton) {
+    adventureButton.addEventListener("click", () => {
+      const randomAdventure = pickRandom(adventureIdeasList);
+      adventureButton.textContent = randomAdventure;
+    });
+  }
+});
+
+
+
+
+
+
+
+//map generator:
+
+const biomeSelect = document.getElementById("biomeSelect");
+const mapBox = document.getElementById("generateMap");
+
+mapBox.addEventListener("click", () => {
+  const biome = biomeSelect.value;
+
+  const biomeObject = {
+    'badlands': ['images/map_images/badlands/1.jpg', 'images/map_images/badlands/2.jpg', 'images/map_images/badlands/3.jpg', 'images/map_images/badlands/4.jpg', 'images/map_images/badlands/5.jpg', 'images/map_images/badlands/6.jpg', 'images/map_images/badlands/7.jpg', 'images/map_images/badlands/8.jpg', 'images/map_images/badlands/9.jpg', 'images/map_images/badlands/10.jpg', 'images/map_images/badlands/11.jpg', 'images/map_images/badlands/12.jpg', 'images/map_images/badlands/13.jpg', 'images/map_images/badlands/14.jpg', 'images/map_images/badlands/15.jpg', 'images/map_images/badlands/16.jpg'],
+    'caves': ['images/map_images/caves/1.jpg', 'images/map_images/caves/2.jpg', 'images/map_images/caves/3.jpg', 'images/map_images/caves/4.jpg', 'images/map_images/caves/5.jpg', 'images/map_images/caves/6.jpg', 'images/map_images/caves/7.jpg', 'images/map_images/caves/8.jpg', 'images/map_images/caves/9.jpg', 'images/map_images/caves/10.jpg', 'images/map_images/caves/11.jpg', 'images/map_images/caves/12.jpg', 'images/map_images/caves/13.jpg', 'images/map_images/caves/14.jpg', 'images/map_images/caves/15.jpg', 'images/map_images/caves/16.jpg'],
+    'desert': ['images/map_images/desert/1.jpg', 'images/map_images/desert/2.jpg', 'images/map_images/desert/3.jpg', 'images/map_images/desert/4.jpg', 'images/map_images/desert/5.jpg', 'images/map_images/desert/6.jpg', 'images/map_images/desert/7.jpg', 'images/map_images/desert/8.jpg', 'images/map_images/desert/9.jpg', 'images/map_images/desert/10.jpg', 'images/map_images/desert/11.jpg', 'images/map_images/desert/12.jpg'],
+    'forest': ['images/map_images/forest/1.jpg', 'images/map_images/forest/2.jpg', 'images/map_images/forest/3.jpg', 'images/map_images/forest/4.jpg', 'images/map_images/forest/5.jpg', 'images/map_images/forest/6.jpg', 'images/map_images/forest/7.jpg', 'images/map_images/forest/8.jpg', 'images/map_images/forest/9.jpg', 'images/map_images/forest/10.jpg', 'images/map_images/forest/11.jpg', 'images/map_images/forest/12.jpg', 'images/map_images/forest/13.jpg', 'images/map_images/forest/14.jpg', 'images/map_images/forest/15.jpg', 'images/map_images/forest/16.jpg'],
+    'grassland': ['images/map_images/grassland/1.jpg', 'images/map_images/grassland/2.jpg', 'images/map_images/grassland/3.jpg', 'images/map_images/grassland/4.jpg', 'images/map_images/grassland/5.jpg', 'images/map_images/grassland/6.jpg', 'images/map_images/grassland/7.jpg', 'images/map_images/grassland/8.jpg', 'images/map_images/grassland/9.jpg', 'images/map_images/grassland/10.jpg', 'images/map_images/grassland/11.jpg', 'images/map_images/grassland/12.jpg', 'images/map_images/grassland/13.jpg', 'images/map_images/grassland/14.jpg', 'images/map_images/grassland/15.jpg', 'images/map_images/grassland/16.jpg'],
+    'jungle': ['images/map_images/jungle/1.jpg', 'images/map_images/jungle/2.jpg', 'images/map_images/jungle/3.jpg', 'images/map_images/jungle/4.jpg', 'images/map_images/jungle/5.jpg', 'images/map_images/jungle/6.jpg', 'images/map_images/jungle/7.jpg', 'images/map_images/jungle/8.jpg', 'images/map_images/jungle/9.jpg', 'images/map_images/jungle/10.jpg', 'images/map_images/jungle/11.jpg', 'images/map_images/jungle/12.jpg', 'images/map_images/jungle/13.jpg', 'images/map_images/jungle/14.jpg', 'images/map_images/jungle/15.jpg', 'images/map_images/jungle/16.jpg'],
+    'snowy forest': ['images/map_images/snowy forest/1.jpg', 'images/map_images/snowy forest/2.jpg', 'images/map_images/snowy forest/3.jpg', 'images/map_images/snowy forest/4.jpg', 'images/map_images/snowy forest/5.jpg', 'images/map_images/snowy forest/6.jpg', 'images/map_images/snowy forest/7.jpg', 'images/map_images/snowy forest/8.jpg', 'images/map_images/snowy forest/9.jpg', 'images/map_images/snowy forest/10.jpg', 'images/map_images/snowy forest/11.jpg', 'images/map_images/snowy forest/12.jpg', 'images/map_images/snowy forest/13.jpg', 'images/map_images/snowy forest/14.jpg', 'images/map_images/snowy forest/15.jpg', 'images/map_images/snowy forest/16.jpg'],
+    'snowy grassland': ['images/map_images/snowy grassland/1.jpg', 'images/map_images/snowy grassland/2.jpg', 'images/map_images/snowy grassland/3.jpg', 'images/map_images/snowy grassland/4.jpg', 'images/map_images/snowy grassland/5.jpg', 'images/map_images/snowy grassland/6.jpg', 'images/map_images/snowy grassland/7.jpg', 'images/map_images/snowy grassland/8.jpg', 'images/map_images/snowy grassland/9.jpg', 'images/map_images/snowy grassland/10.jpg', 'images/map_images/snowy grassland/11.jpg', 'images/map_images/snowy grassland/12.jpg', 'images/map_images/snowy grassland/13.jpg', 'images/map_images/snowy grassland/14.jpg', 'images/map_images/snowy grassland/15.jpg', 'images/map_images/snowy grassland/16.jpg'],
+    'volcano': ['images/map_images/volcano/1.jpg', 'images/map_images/volcano/2.jpg', 'images/map_images/volcano/3.jpg', 'images/map_images/volcano/4.jpg', 'images/map_images/volcano/5.jpg', 'images/map_images/volcano/6.jpg', 'images/map_images/volcano/7.jpg', 'images/map_images/volcano/8.jpg', 'images/map_images/volcano/9.jpg', 'images/map_images/volcano/10.jpg', 'images/map_images/volcano/11.jpg', 'images/map_images/volcano/12.jpg', 'images/map_images/volcano/13.jpg', 'images/map_images/volcano/14.jpg', 'images/map_images/volcano/15.jpg', 'images/map_images/volcano/16.jpg']
+  };
+
+  const imageList = biomeObject[biome];
+  if (!imageList) {
+    mapBox.innerHTML = "No images found for this biome.";
+    return;
+  }
+
+  const randomIndex = Math.floor(Math.random() * imageList.length);
+  const selectedImage = imageList[randomIndex];
+
+  mapBox.innerHTML = `<img src="${selectedImage}" alt="${biome} map">`;
+  });
 
 
 
@@ -1271,61 +1381,34 @@ const imageListRoller = [
   'images/roller_images/19.png', 'images/roller_images/20.png'];
 
 
-function showRandomImage() {
-  const randomIndex = Math.floor(Math.random() * 20); // number 0–19
-  const selectedImage = imageListRoller[randomIndex];
-  const imageBoxRoller = document.getElementById('imageBoxRoller');
-  imageBoxRoller.innerHTML = `<img src="${selectedImage}" alt="Random Image">`;
-}
-document.getElementById('imageBoxRoller').addEventListener('click', showRandomImage);
-
-
-
-//map generator:
-document.getElementById("generateMap").addEventListener("click", () => {
-  const biome = document.getElementById("biomeSelect").value;
-  const biomeObject = {
-    'badlands': ['images/map_images/badlands/1.jpg', 'images/map_images/badlands/2.jpg', 'images/map_images/badlands/3.jpg', 'images/map_images/badlands/4.jpg', 'images/map_images/badlands/5.jpg', 'images/map_images/badlands/6.jpg', 'images/map_images/badlands/7.jpg', 'images/map_images/badlands/8.jpg', 'images/map_images/badlands/9.jpg', 'images/map_images/badlands/10.jpg', 'images/map_images/badlands/11.jpg', 'images/map_images/badlands/12.jpg', 'images/map_images/badlands/13.jpg', 'images/map_images/badlands/14.jpg', 'images/map_images/badlands/15.jpg', 'images/map_images/badlands/16.jpg'],
-    'caves' : ['images/map_images/caves/1.jpg', 'images/map_images/caves/2.jpg', 'images/map_images/caves/3.jpg', 'images/map_images/caves/4.jpg', 'images/map_images/caves/5.jpg', 'images/map_images/caves/6.jpg', 'images/map_images/caves/7.jpg', 'images/map_images/caves/8.jpg', 'images/map_images/caves/9.jpg', 'images/map_images/caves/10.jpg', 'images/map_images/caves/11.jpg', 'images/map_images/caves/12.jpg', 'images/map_images/caves/13.jpg', 'images/map_images/caves/14.jpg', 'images/map_images/caves/15.jpg', 'images/map_images/caves/16.jpg'],
-    'desert': ['images/map_images/desert/1.jpg', 'images/map_images/desert/2.jpg', 'images/map_images/desert/3.jpg', 'images/map_images/desert/4.jpg', 'images/map_images/desert/5.jpg', 'images/map_images/desert/6.jpg', 'images/map_images/desert/7.jpg', 'images/map_images/desert/8.jpg', 'images/map_images/desert/9.jpg', 'images/map_images/desert/10.jpg', 'images/map_images/desert/11.jpg', 'images/map_images/desert/12.jpg',],
-    'forest': ['images/map_images/forest/1.jpg', 'images/map_images/forest/2.jpg', 'images/map_images/forest/3.jpg', 'images/map_images/forest/4.jpg', 'images/map_images/forest/5.jpg', 'images/map_images/forest/6.jpg', 'images/map_images/forest/7.jpg', 'images/map_images/forest/8.jpg', 'images/map_images/forest/9.jpg', 'images/map_images/forest/10.jpg', 'images/map_images/forest/11.jpg', 'images/map_images/forest/12.jpg', 'images/map_images/forest/13.jpg', 'images/map_images/forest/14.jpg', 'images/map_images/forest/15.jpg', 'images/map_images/forest/16.jpg'],
-    'grassland': ['images/map_images/grassland/1.jpg', 'images/map_images/grassland/2.jpg', 'images/map_images/grassland/3.jpg', 'images/map_images/grassland/4.jpg', 'images/map_images/grassland/5.jpg', 'images/map_images/grassland/6.jpg', 'images/map_images/grassland/7.jpg', 'images/map_images/grassland/8.jpg', 'images/map_images/grassland/9.jpg', 'images/map_images/grassland/10.jpg', 'images/map_images/grassland/11.jpg', 'images/map_images/grassland/12.jpg', 'images/map_images/grassland/13.jpg', 'images/map_images/grassland/14.jpg', 'images/map_images/grassland/15.jpg', 'images/map_images/grassland/16.jpg'],
-    'jungle': ['images/map_images/jungle/1.jpg', 'images/map_images/jungle/2.jpg', 'images/map_images/jungle/3.jpg', 'images/map_images/jungle/4.jpg', 'images/map_images/jungle/5.jpg', 'images/map_images/jungle/6.jpg', 'images/map_images/jungle/7.jpg', 'images/map_images/jungle/8.jpg', 'images/map_images/jungle/9.jpg', 'images/map_images/jungle/10.jpg', 'images/map_images/jungle/11.jpg', 'images/map_images/jungle/12.jpg', 'images/map_images/jungle/13.jpg', 'images/map_images/jungle/14.jpg', 'images/map_images/jungle/15.jpg', 'images/map_images/jungle/16.jpg'],
-    'snowy forest': ['images/map_images/snowy forest/1.jpg', 'images/map_images/snowy forest/2.jpg', 'images/map_images/snowy forest/3.jpg', 'images/map_images/snowy forest/4.jpg', 'images/map_images/snowy forest/5.jpg', 'images/map_images/snowy forest/6.jpg', 'images/map_images/snowy forest/7.jpg', 'images/map_images/snowy forest/8.jpg', 'images/map_images/snowy forest/9.jpg', 'images/map_images/snowy forest/10.jpg', 'images/map_images/snowy forest/11.jpg', 'images/map_images/snowy forest/12.jpg', 'images/map_images/snowy forest/13.jpg', 'images/map_images/snowy forest/14.jpg', 'images/map_images/snowy forest/15.jpg', 'images/map_images/snowy forest/16.jpg'],
-    'snowy grassland': ['images/map_images/snowy grassland/1.jpg', 'images/map_images/snowy grassland/2.jpg', 'images/map_images/snowy grassland/3.jpg', 'images/map_images/snowy grassland/4.jpg', 'images/map_images/snowy grassland/5.jpg', 'images/map_images/snowy grassland/6.jpg', 'images/map_images/snowy grassland/7.jpg', 'images/map_images/snowy grassland/8.jpg', 'images/map_images/snowy grassland/9.jpg', 'images/map_images/snowy grassland/10.jpg', 'images/map_images/snowy grassland/11.jpg', 'images/map_images/snowy grassland/12.jpg', 'images/map_images/snowy grassland/13.jpg', 'images/map_images/snowy grassland/14.jpg', 'images/map_images/snowy grassland/15.jpg', 'images/map_images/snowy grassland/16.jpg'],
-    'volcano': ['images/map_images/volcano/1.jpg', 'images/map_images/volcano/2.jpg', 'images/map_images/volcano/3.jpg', 'images/map_images/volcano/4.jpg', 'images/map_images/volcano/5.jpg', 'images/map_images/volcano/6.jpg', 'images/map_images/volcano/7.jpg', 'images/map_images/volcano/8.jpg', 'images/map_images/volcano/9.jpg', 'images/map_images/volcano/10.jpg', 'images/map_images/volcano/11.jpg', 'images/map_images/volcano/12.jpg', 'images/map_images/volcano/13.jpg', 'images/map_images/volcano/14.jpg', 'images/map_images/volcano/15.jpg', 'images/map_images/volcano/16.jpg']
-
-  
-  };
-  const imageList = biomeObject[biome];
-  const randomIndex = Math.floor(Math.random() * imageList.length);
-  const chosenImage = imageList[randomIndex];
-  window.open(chosenImage, "_blank");
+document.querySelectorAll('.dice-box').forEach(box => {
+  box.addEventListener('click', () => {
+    const sides = parseInt(box.getAttribute('data-sides'));
+    const randomIndex = Math.floor(Math.random() * sides);
+    const selectedImage = imageListRoller[randomIndex] || imageListRoller[0];
+    box.innerHTML = `<img src="${selectedImage}" alt="Rolled a ${randomIndex + 1}">`;
+    setTimeout(() => {
+      box.textContent = `Roll D${sides}`;
+    }, 10000);
+  });
 });
 
 
 
 
-
-
-  // ALert Button 
-  window.onload = function () {
-    const alertBox = document.getElementById("alertBox");
-    alertBox.style.display = "block";
-    setTimeout(() => {
-      alertBox.style.display = "none";
-    }, 10000);
-  };
-
-
-
+//Dragon
 
   window.addEventListener('load', () => {
   const dragon = document.querySelector('.dragon');
   const site = document.getElementById('site-content');
+  const intro = document.getElementById('intro-dragon');
+
   setTimeout(() => dragon.classList.add('attack'), 500);
   setTimeout(() => {
-    document.getElementById('intro-dragon').style.display = 'none';
+    intro.style.display = 'none';
     site.style.display = 'block';
-    }, 4000); // 4 seconds later
-    });
+  }, 4000);
+  setTimeout(() => {
+    alert("Be Aware! The Enemy Generator is not accurate yet! AI sucks!");
+  }, 4200);
+});

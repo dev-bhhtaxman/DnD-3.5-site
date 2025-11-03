@@ -2,376 +2,342 @@
 <html lang="en">
 
 <head>
-      <meta charset="UTF-8">
-      <meta name="viewport" content="width=device-width, initial-scale=1.0">
-      <title>3.5 MAGIPEDIA</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="styles.css">
 
-      <!-- Link to external CSS file -->
-      <link rel="stylesheet" href="styles.css">
-
-
-
+    <title>Magipedia 3.5</title>
 </head>
 
 <body>
-      <div id="intro-dragon">
-            <img src="images/dragon.png" alt="dragon" class="dragon">
-      </div>
-      <header>
-            <h1>3.5 MAGIPEDIA</h1>
-      </header>
 
-      <div class="firstbox">
-            <p class="inline" id="firstbar"><a href="#books">Books</a></p>
-            <p class="inline" id="firstbar"><a href="#charGen">Character Generator</a></p>
-            <p class="inline" id="firstbar"><a href="#enemyGen">Enemy Generator</a></p>
-            <p class="inline" id="firstbar"><a href="#mapGen">Map Generator</a></p>
-            <p class="inline" id="firstbar"><a href="#advGen">Random Adventures</a></p>
-            <p class="inline" id="firstbar"><a href="#roller">Roller</a></p>
-      </div>
+    <!----------------------------------DARGON----------------------------------------->
+    
+    <div id="intro-dragon">
+        <img src="images/dragon.png" alt="Dragon" class="dragon">
+    </div>
+    <div id="site-content" style="display:none;">
 
 
-      <div id="alertBox">Be aware! The Enemy Generator isn't accurate yet!</div>
+        <!-------------------------------Books------------------------------------>
+        <div class="book">
+            <img src="images/book_background.png" alt="Book Background" class="book-bg">
 
-
-
-
-
-      <!--other site searches-->
-      <div class="searchContainer">
-            <div class="otherSearchBox" id="first_srch">
-                  <form action="https://en.wikipedia.org/w/index.php" target="_blank">
-                        <input type="text" name="search" placeholder="Search Wiki">
-                        <button>DnD Wiki</button>
-                  </form>
+            <!-- Left Page -->
+            <div class="page left-page">
+                <h2>Table of Contents</h2>
+                <ul>
+                    <li class="TOC"><a href="#" data-page="books">Books</a></li>
+                    <li class="TOC"><a href="#" data-page="charGen">Character Generator</a></li>
+                    <li class="TOC"><a href="#" data-page="enemyGen">Enemy Generator</a></li>
+                    <li class="TOC"><a href="#" data-page="mapGen">Map Generator</a></li>
+                    <li class="TOC"><a href="#" data-page="advGen">Adventure Generator</a></li>
+                    <li class="TOC"><a href="#" data-page="roller">Dice Roller</a></li>
+                    <li class="TOC"><a href="#" data-page="searches">Search</a></li>
+                </ul>
             </div>
-            <div class="otherSearchBox" id="second_srch">
-                  <form action="https://www.d20srd.org/index.htm" target="_blank">
-                        <input type="text" name="q" placeholder="Search d20 SRD">
-                        <button>Srd20-Site</button>
-                        <p>You will have to press 'Search' again on their page</p>
-                  </form>
-                  
-            </div>
-      </div>
-      <!--other site searches-->
+
+            <!-- Right Pages -->
 
 
 
+            <div class="page right-page" id="books">
+                <h2 class="books-heading">Page Of Holding</h2>
+                <div class="rolodex" id="booksRolodex">
+                    <a class="card" href="books/D&D - Arms and Equipment Guide.pdf" target="_blank">
+                        <img src="images/arms_and_equipment_guide.png" class="book-pic" alt="Arms and Equipment Guide">
+                        <span>Arms and Equipment Guide</span>
+                    </a>
 
+                    <a class="card" href="books/D&D - Book of Vile Darkness.pdf" target="_blank">
+                        <img src="images/book_of_vile_darkness.png" class="book-pic" alt="Book of Vile Darkness">
+                        <span>Book of Vile Darkness</span>
+                    </a>
 
-      <main>
+                    <a class="card" href="books/D&D 3.5 - Book of Exalted Deeds.pdf" target="_blank">
+                        <img src="images/bookofexalteddeeds.png" class="book-pic" alt="Book of Exalted Deeds">
+                        <span>Book of Exalted Deeds</span>
+                    </a>
 
-            <h1 id="books">BOOKS</h1>
+                    <a class="card" href="books/[D&D 3.5] Complete Adventurer.pdf" target="_blank">
+                        <img src="images/completeAdventurerBook.png" class="book-pic" alt="Complete Adventurer">
+                        <span>Complete Adventurer</span>
+                    </a>
 
-            <div class="rolodex-wrap">
-                  <button class="nav prev" aria-label="Previous" id="prevBtn">‹</button>
+                    <a class="card" href="books/[D&D 3.5] Complete Arcane.pdf" target="_blank">
+                        <img src="images/Complete-arcane-cover.png" class="book-pic" alt="Complete Arcane">
+                        <span>Complete Arcane</span>
+                    </a>
 
-                  <div class="rolodex" id="booksRolodex">
-                        <a class="card" href="books/D&D - Arms and Equipment Guide.pdf" target="_blank">
-                              <img src="images/arms_and_equipment_guide.png" class="book-pic"
-                                    alt="Arms and Equipment Guide">
-                              <span>Arms and Equipment Guide</span>
-                        </a>
+                    <a class="card" href="books/%5BD%26D%203.5%5D%20Complete%20Champion.pdf" target="_blank">
+                        <img src="images/Complete_Champion.png" class="book-pic" alt="Complete Champion">
+                        <span>Complete Champion</span>
+                    </a>
 
-                        <a class="card" href="books/D&D - Book of Vile Darkness.pdf" target="_blank">
-                              <img src="images/book_of_vile_darkness.png" class="book-pic" alt="Book of Vile Darkness">
-                              <span>Book of Vile Darkness</span>
-                        </a>
+                    <a class="card" href="books/[D&D 3.5] Complete Divine 3.5.pdf" target="_blank">
+                        <img src="images/Complete_Divine.png" class="book-pic" alt="Complete Divine">
+                        <span>Complete Divine</span>
+                    </a>
 
-                        <a class="card" href="books/D&D 3.5 - Book of Exalted Deeds.pdf" target="_blank">
-                              <img src="images/bookofexalteddeeds.png" class="book-pic" alt="Book of Exalted Deeds">
-                              <span>Book of Exalted Deeds</span>
-                        </a>
+                    <a class="card" href="books/[D&D 3.5] Complete Mage.pdf" target="_blank">
+                        <img src="images/Complete_Mage.png" class="book-pic" alt="Complete Mage">
+                        <span>Complete Mage</span>
+                    </a>
 
-                        <a class="card" href="books/[D&D 3.5] Complete Adventurer.pdf" target="_blank">
-                              <img src="images/completeAdventurerBook.png" class="book-pic" alt="Complete Adventurer">
-                              <span>Complete Adventurer</span>
-                        </a>
+                    <a class="card" href="books/D&D - Complete Scoundrel.pdf" target="_blank">
+                        <img src="images/Complete_Scoundrel.png" class="book-pic" alt="Complete Scoundrel">
+                        <span>Complete Scoundrel</span>
+                    </a>
 
-                        <a class="card" href="books/[D&D 3.5] Complete Arcane.pdf" target="_blank">
-                              <img src="images/Complete-arcane-cover.png" class="book-pic" alt="Complete Arcane">
-                              <span>Complete Arcane</span>
-                        </a>
+                    <a class="card" href="books/[D&D 3.5] Complete Warrior.pdf" target="_blank">
+                        <img src="images/Complete_Warrior_coverthumb.png" class="book-pic" alt="Complete Warrior">
+                        <span>Complete Warrior</span>
+                    </a>
 
-                        <a class="card" href="books/%5BD%26D%203.5%5D%20Complete%20Champion.pdf" target="_blank">
-                              <img src="images/Complete_Champion.png" class="book-pic" alt="Complete Champion">
-                              <span>Complete Champion</span>
-                        </a>
+                    <a class="card" href="books/DEFENDERS OF FAITH.pdf" target="_blank">
+                        <img src="images/Defenders_of_the_Faith.png" class="book-pic" alt="Defenders of the Faith">
+                        <span>Defenders of the Faith</span>
+                    </a>
 
-                        <a class="card" href="books/[D&D 3.5] Complete Divine 3.5.pdf" target="_blank">
-                              <img src="images/Complete_Divine.png" class="book-pic" alt="Complete Divine">
-                              <span>Complete Divine</span>
-                        </a>
+                    <a class="card" href="books/DMG 3.5.pdf" target="_blank">
+                        <img src="images/dmg.png" class="book-pic" alt="DMG">
+                        <span>DMG</span>
+                    </a>
 
-                        <a class="card" href="books/[D&D 3.5] Complete Mage.pdf" target="_blank">
-                              <img src="images/Complete_Mage.png" class="book-pic" alt="Complete Mage">
-                              <span>Complete Mage</span>
-                        </a>
+                    <a class="card" href="books/dungeonsdragonsdraconomicon.pdf" target="_blank">
+                        <img src="images/draconomicon.png" class="book-pic" alt="Draconomicon">
+                        <span>Draconomicon</span>
+                    </a>
 
-                        <a class="card" href="books/D&D - Complete Scoundrel.pdf" target="_blank">
-                              <img src="images/Complete_Scoundrel.png" class="book-pic" alt="Complete Scoundrel">
-                              <span>Complete Scoundrel</span>
-                        </a>
+                    <a class="card" href="books/DRAGON MAGIC.pdf" target="_blank">
+                        <img src="images/Dragon_Magic.png" class="book-pic" alt="Dragon Magic">
+                        <span>Dragon Magic</span>
+                    </a>
 
-                        <a class="card" href="books/[D&D 3.5] Complete Warrior.pdf" target="_blank">
-                              <img src="images/Complete_Warrior_coverthumb.png" class="book-pic" alt="Complete Warrior">
-                              <span>Complete Warrior</span>
-                        </a>
+                    <a class="card" href="books/DROW OF THE UNDERDARK.pdf" target="_blank">
+                        <img src="images/Drow_of_the_Underdark.png" class="book-pic" alt="Drow of the Underdark">
+                        <span>Drow of the Underdark</span>
+                    </a>
 
-                        <a class="card" href="books/DEFENDERS OF FAITH.pdf" target="_blank">
-                              <img src="images/Defenders_of_the_Faith.png" class="book-pic"
-                                    alt="Defenders of the Faith">
-                              <span>Defenders of the Faith</span>
-                        </a>
+                    <a class="card" href="books/d&d 3.5 - epic level handbook.pdf" target="_blank">
+                        <img src="images/epiclevelhandbook.png" class="book-pic" alt="Epic Level Handbook">
+                        <span>Epic Level Handbook</span>
+                    </a>
 
-                        <a class="card" href="books/DMG 3.5.pdf" target="_blank">
-                              <img src="images/dmg.png" class="book-pic" alt="DMG">
-                              <span>DMG</span>
-                        </a>
+                    <a class="card" href="books/3.5 Expanded Psionic_s Handbook.pdf" target="_blank">
+                        <img src="images/En_psionics_hndbk_v35_cover.png" class="book-pic" alt="Expanded Psionics">
+                        <span>Expanded Psionics</span>
+                    </a>
 
-                        <a class="card" href="books/dungeonsdragonsdraconomicon.pdf" target="_blank">
-                              <img src="images/draconomicon.png" class="book-pic" alt="Draconomicon">
-                              <span>Draconomicon</span>
-                        </a>
+                    <a class="card" href="books/D&D - Fiend Folio.pdf" target="_blank">
+                        <img src="images/Fiendfolio.png" class="book-pic" alt="Fiend Folio">
+                        <span>Fiend Folio</span>
+                    </a>
 
-                        <a class="card" href="books/DRAGON MAGIC.pdf" target="_blank">
-                              <img src="images/Dragon_Magic.png" class="book-pic" alt="Dragon Magic">
-                              <span>Dragon Magic</span>
-                        </a>
+                    <a class="card" href="books/DnD 3.5 Frostburn.pdf" target="_blank">
+                        <img src="images/frostburn.png" class="book-pic" alt="Frostburn">
+                        <span>Frostburn</span>
+                    </a>
 
-                        <a class="card" href="books/DROW OF THE UNDERDARK.pdf" target="_blank">
-                              <img src="images/Drow_of_the_Underdark.png" class="book-pic" alt="Drow of the Underdark">
-                              <span>Drow of the Underdark</span>
-                        </a>
+                    <a class="card" href="books/D&D 3.5 - Heroes of Horror (1).pdf" target="_blank">
+                        <img src="images/heroes_of_horror.png" class="book-pic" alt="Heroes of Horror">
+                        <span>Heroes of Horror</span>
+                    </a>
 
-                        <a class="card" href="books/d&d 3.5 - epic level handbook.pdf" target="_blank">
-                              <img src="images/epiclevelhandbook.png" class="book-pic" alt="Epic Level Handbook">
-                              <span>Epic Level Handbook</span>
-                        </a>
+                    <a class="card" href="books/LIBRIS MORTIS.pdf" target="_blank">
+                        <img src="images/Libris_Mortis_cover.png" class="book-pic" alt="Libris Mortis">
+                        <span>Libris Mortis</span>
+                    </a>
 
-                        <a class="card" href="books/3.5 Expanded Psionic_s Handbook.pdf" target="_blank">
-                              <img src="images/En_psionics_hndbk_v35_cover.png" class="book-pic"
-                                    alt="Expanded Psionics">
-                              <span>Expanded Psionics</span>
-                        </a>
+                    <a class="card" href="books/Lords of Madness.pdf" target="_blank">
+                        <img src="images/lords_of_madness.png" class="book-pic" alt="Lords of Madness">
+                        <span>Lords of Madness</span>
+                    </a>
 
-                        <a class="card" href="books/D&D - Fiend Folio.pdf" target="_blank">
-                              <img src="images/Fiendfolio.png" class="book-pic" alt="Fiend Folio">
-                              <span>Fiend Folio</span>
-                        </a>
+                    <a class="card" href="books/[D&D 3.5] Magic Item Compendium.pdf" target="_blank">
+                        <img src="images/Magic_Item_Compendium.png" class="book-pic" alt="Magic Item Compendium">
+                        <span>Magic Item Compendium</span>
+                    </a>
 
-                        <a class="card" href="books/DnD 3.5 Frostburn.pdf" target="_blank">
-                              <img src="images/frostburn.png" class="book-pic" alt="Frostburn">
-                              <span>Frostburn</span>
-                        </a>
+                    <a class="card" href="books/3.5 magic of incarnum.pdf" target="_blank">
+                        <img src="images/Magic_of_Incarnum.jpg" class="book-pic" alt="Magic of Incarnum">
+                        <span>Magic of Incarnum</span>
+                    </a>
 
-                        <a class="card" href="books/D&D 3.5 - Heroes of Horror (1).pdf" target="_blank">
-                              <img src="images/heroes_of_horror.png" class="book-pic" alt="Heroes of Horror">
-                              <span>Heroes of Horror</span>
-                        </a>
+                    <a class="card" href="books/D&D - Masters of the Wild.pdf" target="_blank">
+                        <img src="images/Masters_of_the_Wild.png" class="book-pic" alt="Masters of the Wild">
+                        <span>Masters of the Wild</span>
+                    </a>
 
-                        <a class="card" href="books/LIBRIS MORTIS.pdf" target="_blank">
-                              <img src="images/Libris_Mortis_cover.png" class="book-pic" alt="Libris Mortis">
-                              <span>Libris Mortis</span>
-                        </a>
+                    <a class="card" href="books/D&D 3.5 - Monster Manual.pdf" target="_blank">
+                        <img src="images/monstermanual.png" class="book-pic" alt="Monster Manual">
+                        <span>Monster Manual</span>
+                    </a>
 
-                        <a class="card" href="books/Lords of Madness.pdf" target="_blank">
-                              <img src="images/lords_of_madness.png" class="book-pic" alt="Lords of Madness">
-                              <span>Lords of Madness</span>
-                        </a>
+                    <a class="card" href="books/MonsterManualII (1).pdf" target="_blank">
+                        <img src="images/Monstermanual2.png" class="book-pic" alt="Monster Manual II">
+                        <span>Monster Manual II</span>
+                    </a>
 
-                        <a class="card" href="books/[D&D 3.5] Magic Item Compendium.pdf" target="_blank">
-                              <img src="images/Magic_Item_Compendium.png" class="book-pic" alt="Magic Item Compendium">
-                              <span>Magic Item Compendium</span>
-                        </a>
+                    <a class="card" href="books/MonsterManualIII (1).pdf" target="_blank">
+                        <img src="images/mm3.png" class="book-pic" alt="Monster Manual III">
+                        <span>Monster Manual III</span>
+                    </a>
 
-                        <a class="card" href="books/3.5 magic of incarnum.pdf" target="_blank">
-                              <img src="images/Magic_of_Incarnum.jpg" class="book-pic" alt="Magic of Incarnum">
-                              <span>Magic of Incarnum</span>
-                        </a>
+                    <a class="card" href="books/MonsterManualIV (1).pdf" target="_blank">
+                        <img src="images/mm4.png" class="book-pic" alt="Monster Manual IV">
+                        <span>Monster Manual IV</span>
+                    </a>
 
-                        <a class="card" href="books/D&D - Masters of the Wild.pdf" target="_blank">
-                              <img src="images/Masters_of_the_Wild.png" class="book-pic" alt="Masters of the Wild">
-                              <span>Masters of the Wild</span>
-                        </a>
+                    <a class="card" href="books/PHB.pdf" target="_blank">
+                        <img src="images/booksPic.png" class="book-pic" alt="PHB">
+                        <span>PHB</span>
+                    </a>
 
-                        <a class="card" href="books/D&D 3.5 - Monster Manual.pdf" target="_blank">
-                              <img src="images/monstermanual.png" class="book-pic" alt="Monster Manual">
-                              <span>Monster Manual</span>
-                        </a>
+                    <a class="card" href="books/D%26D%203.5%20-%20PHB2.pdf" target="_blank">
+                        <img src="images/phb2.png" class="book-pic" alt="PHB2">
+                        <span>PHB 2</span>
+                    </a>
 
-                        <a class="card" href="books/MonsterManualII (1).pdf" target="_blank">
-                              <img src="images/Monstermanual2.png" class="book-pic" alt="Monster Manual II">
-                              <span>Monster Manual II</span>
-                        </a>
+                    <a class="card" href="books/[D&D 3.5] Races of Destiny.pdf" target="_blank">
+                        <img src="images/Races_of_Destiny_cover.png" class="book-pic" alt="Races of Destiny">
+                        <span>Races of Destiny</span>
+                    </a>
 
-                        <a class="card" href="books/MonsterManualIII (1).pdf" target="_blank">
-                              <img src="images/mm3.png" class="book-pic" alt="Monster Manual III">
-                              <span>Monster Manual III</span>
-                        </a>
+                    <a class="card" href="books/Savage Species.pdf" target="_blank">
+                        <img src="images/Savage_Species.png" class="book-pic" alt="Savage Species">
+                        <span>Savage Species</span>
+                    </a>
 
-                        <a class="card" href="books/MonsterManualIV (1).pdf" target="_blank">
-                              <img src="images/mm4.png" class="book-pic" alt="Monster Manual IV">
-                              <span>Monster Manual IV</span>
-                        </a>
+                    <a class="card" href="books/[D&D 3.5] Spell Compendium.pdf" target="_blank">
+                        <img src="images/Spell_Compendium.png" class="book-pic" alt="Spell Compendium">
+                        <span>Spell Compendium</span>
+                    </a>
 
-                        <a class="card" href="books/PHB.pdf" target="_blank">
-                              <img src="images/booksPic.png" class="book-pic" alt="PHB">
-                              <span>PHB</span>
-                        </a>
-
-                        <a class="card" href="books/D%26D%203.5%20-%20PHB2.pdf" target="_blank">
-                              <img src="images/phb2.png" class="book-pic" alt="PHB2">
-                              <span>PHB 2</span>
-                        </a>
-
-                        <a class="card" href="books/[D&D 3.5] Races of Destiny.pdf" target="_blank">
-                              <img src="images/Races_of_Destiny_cover.png" class="book-pic" alt="Races of Destiny">
-                              <span>Races of Destiny</span>
-                        </a>
-
-                        <a class="card" href="books/Savage Species.pdf" target="_blank">
-                              <img src="images/Savage_Species.png" class="book-pic" alt="Savage Species">
-                              <span>Savage Species</span>
-                        </a>
-
-                        <a class="card" href="books/[D&D 3.5] Spell Compendium.pdf" target="_blank">
-                              <img src="images/Spell_Compendium.png" class="book-pic" alt="Spell Compendium">
-                              <span>Spell Compendium</span>
-                        </a>
-
-                        <!--<a class="card" href="" target="_blank">
+                    <!--<a class="card" href="" target="_blank">
                               <img src="" class="" alt="">
                               <span></span>
                         </a>-->
-                  </div>
+                </div>
+            </div>
+            <!-------------------------------------------------BOOKS--------------------------------------------------------------------------->
 
-                  <button class="nav next" aria-label="Next" id="nextBtn">›</button>
+
+            <!-------------------------------------------------Character Generator--------------------------------------------------------------------------->
+            <div class="page right-page hidden" id="charGen">
+                <h2>Character Generator</h2>
+                <div class="charGenBox" id="charGenBox">
+                    <p id="outputBox">Generate a Character!</p>
+                </div>
             </div>
 
+            <!-------------------------------------------------Character Generator--------------------------------------------------------------------------->
 
-
-
-
-
-            <!--character generator-->
-            <div>
-                  <h1 id="charGen">CHARACTER GENERATOR</h1>
-                  <div class="charGenBox" id="charGenBox">
-                        <p id="outputBox">Click here to generate a character!</p>
-                  </div>
+            <!-------------------------------------------------Enemy Generator--------------------------------------------------------------------------->
+            <div class="page right-page hidden" id="enemyGen">
+                <h2>Enemy Generator</h2>
+                <select id="crSelect">
+                    <option value="1/10">CR 1/10</option>
+                    <option value="1/8">CR 1/8</option>
+                    <option value="1/6">CR 1/6</option>
+                    <option value="1/4">CR 1/4</option>
+                    <option value="1/2">CR 1/2</option>
+                    <option value="1">CR 1</option>
+                    <option value="2">CR 2</option>
+                    <option value="3">CR 3</option>
+                    <option value="4">CR 4</option>
+                    <option value="5">CR 5</option>
+                    <option value="6">CR 6</option>
+                    <option value="7">CR 7</option>
+                    <option value="8">CR 8</option>
+                    <option value="9">CR 9</option>
+                    <option value="10">CR 10</option>
+                    <option value="11">CR 11</option>
+                    <option value="12">CR 12</option>
+                    <option value="13">CR 13</option>
+                    <option value="14">CR 14</option>
+                    <option value="15">CR 15</option>
+                    <option value="16">CR 16</option>
+                    <option value="17">CR 17</option>
+                    <option value="18">CR 18</option>
+                    <option value="19">CR 19</option>
+                    <option value="20">CR 20</option>
+                    <option value="21">CR 21</option>
+                    <option value="22">CR 22</option>
+                    <option value="23">CR 23</option>
+                    <!--<option value=""></option>-->
+                </select>
+                <div id="generateMonsterButton">Generate an Enemy!</div>
             </div>
-            <!--character generator-->
+            <!-------------------------------------------------Enemy Generator--------------------------------------------------------------------------->
+            <!-------------------------------------------------Adventure Generator--------------------------------------------------------------------------->
 
-
-
-
-            <!--enemy generator-->
-            <h1 id="enemyGen">ENEMY GENERATOR</h1>
-            <select id="crSelect">
-                  <option value="1/10">CR 1/10</option>
-                  <option value="1/8">CR 1/8</option>
-                  <option value="1/6">CR 1/6</option>
-                  <option value="1/4">CR 1/4</option>
-                  <option value="1/2">CR 1/2</option>
-                  <option value="1">CR 1</option>
-                  <option value="2">CR 2</option>
-                  <option value="3">CR 3</option>
-                  <option value="4">CR 4</option>
-                  <option value="5">CR 5</option>
-                  <option value="6">CR 6</option>
-                  <option value="7">CR 7</option>
-                  <option value="8">CR 8</option>
-                  <option value="9">CR 9</option>
-                  <option value="10">CR 10</option>
-                  <option value="11">CR 11</option>
-                  <option value="12">CR 12</option>
-                  <option value="13">CR 13</option>
-                  <option value="14">CR 14</option>
-                  <option value="15">CR 15</option>
-                  <option value="16">CR 16</option>
-                  <option value="17">CR 17</option>
-                  <option value="18">CR 18</option>
-                  <option value="19">CR 19</option>
-                  <option value="20">CR 20</option>
-                  <option value="21">CR 21</option>
-                  <option value="22">CR 22</option>
-                  <option value="23">CR 23</option>
-                  <!--<option value=""></option>-->
-            </select>
-            <div id="generateMonsterButton">Click here to generate an enemy!</div>
-            <!--enemy generator-->
-
-
-            <!--adventure generator-->
-            <div>
-                  <h1 id="advGen">RANDOM ADVENTURES</h1>
-                  <div class="random_adventures" id="random_adventures">
-                        <p id="adventure_output_box">Click here to generate an adventure!</p>
-                  </div>
+            <div class="page right-page hidden" id="advGen">
+                <h2>Adventure Generator</h2>
+                <div id="adventureButton" class="adventureBox">
+                    Generate an Adventure!
+                </div>
             </div>
-            <!--adventure generator-->
+            <!-------------------------------------------------Adventure Generator--------------------------------------------------------------------------->
+            <!-------------------------------------------------Map Generator--------------------------------------------------------------------------->
+            <div class="page right-page hidden" id="mapGen">
+                <h2>Map Generator</h2>
+                <select id="biomeSelect">
+                    <option value="badlands">Badlands</option>
+                    <option value="caves">Caves</option>
+                    <option value="desert">Desert</option>
+                    <option value="forest">Forest</option>
+                    <option value="grassland">Grassland</option>
+                    <option value="jungle">Jungle</option>
+                    <option value="volcano">Volcano</option>
+                    <option value="snowy forest">Snowy Forest</option>
+                    <option value="snowy grassland">Snowy Grassland</option>
+                </select>
+                <div id="generateMap" class="map-box">
+                    Generate Random Map
+                </div>
+                <div id="mapOutput" class="map-box"></div>
+            </div>
 
-
-
-            <!--map generator-->
-            <h1 id="mapGen">MAP GENERATOR</h1>
-
+            <!-------------------------------------------------Map Generator--------------------------------------------------------------------------->
+            <!-------------------------------------------------Roller--------------------------------------------------------------------------->
+            <div class="page right-page hidden" id="roller">
+                <h2>Dice Roller</h2>
             
-            <select id="biomeSelect">
-                  <option value="badlands">Badlands</option>
-                  <option value="caves">Caves</option>
-                  <option value="desert">Desert</option>
-                  <option value="forest">Forest</option>
-                  <option value="grassland">Grassland</option>
-                  <option value="jungle">Jungle</option>
-                  <option value="volcano">Volcano</option>
-                  <option value="snowy forest">Snowy Forest</option>
-                  <option value="snowy grassland">Snowy Grassland</option>
-            </select>
+                <div id="d20" class="dice-box" data-sides="20">Roll D20</div>
+                <div id="d12" class="dice-box" data-sides="12">Roll D12</div>
+                <div id="d10" class="dice-box" data-sides="10">Roll D10</div>
+                <div id="d8" class="dice-box" data-sides="8">Roll D8</div>
+                <div id="d6" class="dice-box" data-sides="6">Roll D6</div>
+                <div id="d4" class="dice-box" data-sides="4">Roll D4</div>
+                <div id="d3" class="dice-box" data-sides="3">Roll D3</div>
+                
+            </div>
 
-            <button id="generateMap">Generate Map</button>
+            <!-------------------------------------------------Roller--------------------------------------------------------------------------->
+            <div class="page right-page hidden" id="searches">
+                <h2>Other Information</h2>
+                <div class="searchContainer">
+                    <div class="otherSearchBox" id="first_srch">
+                        <form action="https://en.wikipedia.org/w/index.php" target="_blank">
+                            <input type="text" name="search" placeholder="Search Wiki">
+                            <button>DnD Wiki</button>
+                        </form>
+                    </div>
+                    <div class="otherSearchBox" id="second_srch">
+                        <form action="https://www.d20srd.org/index.htm" target="_blank">
+                            <input type="text" name="q" placeholder="Search d20 SRD">
+                            <button>Srd20-Site</button>
+                            <p>You will have to press 'Search' again on their page</p>
+                        </form>
 
-            <!--map generator-->
+                    </div>
+                </div>
+            </div>
+        </div>
 
-
-
-
-
-
-
-            <!--random dice roller-->
-            <h1 id="roller">ROLLER</h1>
-
-            <div id="imageBoxRoller">Roll Your Dice!</div>
-
-
-            <!--random dice roller-->
-
-      </main>
-
-
-
-
-
-      <footer>
-            <h5 class="noticeNote">I want to be super clear with anyone who uses this site. All the book content is exclusively the property of, I guess Hasbro now? Anyway you absolutely cannot make any money off the information provided here. Not on the books, not on the maps either! I made all the maps from Dungeon Alchemist. So anything that is produced from them is likely theirs as well. ONLY USE THIS SITE FOR YOUR CAMPAIGNS!! And not for your Youtube campaign either. Just with the homies! You are not trying to get sued, I am not trying to get sued, just...... do a good job.</h2>
-            
-      </footer>
-
-
-
-
-
-
-
-      <div></div>
-
-
-
-      <!-- Link to external JavaScript file -->
-      <script src="script.js"></script>
+        <script src="script.js"></script>
+    </div>
 </body>
 
 </html>
